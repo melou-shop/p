@@ -1,1151 +1,1120 @@
-<title>Melou — Credit & Reviews</title>
-    <!-- Tailwind CSS -->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melou Studio - Payment & Bio Link</title>
+    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Quicksand & Prompt for cute minimal Thai + English look -->
+    <!-- Load Google Fonts: Quicksand & Noto Sans Thai -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
-    <!-- Tone.js for gentle built-in ambient music box melody -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
-        :root {
-            --bg-cream: #FDFBF9;
-            --card-white: #FFFFFF;
-            --border-soft: #EFEAE6;
-            --text-dark: #5A4E48;
-            --text-muted: #8E827B;
-            --btn-beige: #D5D0CD;
-            --btn-beige-hover: #C8C2BE;
-        }
-
+        /* Custom Fonts & Base Aesthetics */
         body {
-            background-color: var(--bg-cream);
-            color: var(--text-dark);
-            font-family: 'Quicksand', 'Prompt', sans-serif;
+            font-family: 'Quicksand', 'Noto Sans Thai', sans-serif;
+            background-color: #f4f3f1;
+            color: #2b2927;
+            margin: 0;
+            padding: 0;
             overflow-x: hidden;
-            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* Dotted grid pattern inside profile banner */
-        .banner-dots {
-            background-color: #FAF7F5;
-            background-image: radial-gradient(#E3DCD6 1.5px, transparent 1.5px);
-            background-size: 14px 14px;
+        /* Dotted Grid Background Pattern */
+        .bg-dotted-pattern {
+            background-color: #fdfcfb;
+            background-image: radial-gradient(#e5e1dc 1.25px, transparent 1.25px);
+            background-size: 20px 20px;
         }
 
-        /* Soft card shadow matching the minimal aesthetic */
+        /* Top Banner Soft Gradient */
+        .header-banner {
+            background: linear-gradient(180deg, #f7f5f3 0%, rgba(253, 252, 251, 0) 100%);
+        }
+
+        /* Soft Floating Hearts Animation */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.9) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.55;
+            }
+            80% {
+                opacity: 0.45;
+            }
+            100% {
+                transform: translateY(-90px) scale(1.1) rotate(12deg);
+                opacity: 0;
+            }
+        }
+
+        .floating-heart {
+            position: absolute;
+            pointer-events: none;
+            animation: floatUp linear infinite;
+            color: #9e9892;
+            z-index: 1;
+        }
+
+        /* Soft Card Elevation */
         .soft-card {
-            background: var(--card-white);
-            border: 1px solid var(--border-soft);
-            box-shadow: 0 4px 20px rgba(90, 78, 72, 0.025);
+            background: #ffffff;
+            border: 1px solid rgba(235, 231, 226, 0.85);
+            box-shadow: 0 8px 24px -6px rgba(43, 41, 39, 0.045), 0 2px 6px -1px rgba(43, 41, 39, 0.02);
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        body {
-            background-color: var(--bg-cream);
-            color: var(--text-dark);
-            font-family: 'Fredoka', 'Prompt', sans-serif;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
+        .soft-card-hover:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px -6px rgba(43, 41, 39, 0.08);
+            border-color: #dcd6ce;
         }
 
-        /* Dotted grid pattern inside profile banner */
-        .banner-dots {
-            background-color: #FBF9F7;
-            background-image: radial-gradient(#E3DCD6 1.5px, transparent 1.5px);
-            background-size: 14px 14px;
+        .soft-card-hover:active {
+            transform: scale(0.98);
         }
 
-        /* Soft card shadow matching the minimal aesthetic */
-        .soft-card {
-            background: var(--card-white);
-            border: 1px solid var(--border-soft);
-            box-shadow: 0 4px 20px rgba(74, 66, 62, 0.025);
+        /* Profile Ring Shadow */
+        .avatar-ring {
+            box-shadow: 0 10px 28px rgba(43, 41, 39, 0.08), 0 0 0 6px #ffffff;
         }
 
-        /* Floating background doodles animation */
-        @keyframes floatSlow {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(4deg); }
+        /* Smooth Accordion */
+        .accordion-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.32s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .doodle-float {
-            animation: floatSlow 6s ease-in-out infinite;
+        .accordion-content.open {
+            grid-template-rows: 1fr;
         }
-        .doodle-float-delay {
-            animation: floatSlow 7.5s ease-in-out 2s infinite;
+        .accordion-inner {
+            overflow: hidden;
         }
 
-        /* Custom subtle scrollbar */
+        /* Music Note Pulse */
+        @keyframes musicBounce {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.12) rotate(-8deg); }
+        }
+        .music-playing {
+            animation: musicBounce 1.4s ease-in-out infinite;
+        }
+
+        /* Custom Scrollbar for Modals */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
         ::-webkit-scrollbar-track {
-            background: #FDFBF9;
+            background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: #DFD9D4;
+            background: #dcd6ce;
             border-radius: 9999px;
         }
     </style>
 </head>
-<body class="min-h-screen relative selection:bg-[#EAE3DD] selection:text-[#4A423E]">
+<body class="min-h-screen flex justify-center items-start sm:py-6 px-0 sm:px-4">
 
-    <!-- Background Decorative Doodles (Hearts & Stars) -->
-    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
-        <!-- Left side doodles -->
-        <svg class="absolute top-[5%] left-[6%] w-4 h-4 text-[#E6DFD9] doodle-float" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg>
-        <svg class="absolute top-[16%] left-[20%] w-4 h-4 text-[#E6DFD9] doodle-float-delay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        <svg class="absolute top-[28%] left-[4%] w-4 h-4 text-[#E6DFD9] doodle-float" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        <svg class="absolute top-[30%] left-[25%] w-4 h-4 text-[#E6DFD9] doodle-float-delay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        <svg class="absolute top-[50%] left-[5%] w-5 h-5 text-[#E6DFD9] doodle-float" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg>
-        <svg class="absolute top-[50%] left-[25%] w-4 h-4 text-[#E6DFD9] doodle-float-delay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg>
-        <svg class="absolute top-[67%] left-[2%] w-5 h-5 text-[#E6DFD9] doodle-float" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        <svg class="absolute top-[74%] left-[23%] w-5 h-5 text-[#E6DFD9] doodle-float-delay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        <svg class="absolute bottom-[6%] left-[22%] w-3.5 h-3.5 text-[#E6DFD9] doodle-float" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg>
+    <!-- Main Mobile Container -->
+    <main id="appContainer" class="relative w-full max-w-[430px] min-h-screen sm:min-h-[820px] bg-dotted-pattern sm:rounded-[38px] shadow-xl overflow-hidden flex flex-col justify-between pb-8 border border-[#ece8e3]">
 
-        <!-- Right side doodles -->
-        <svg class="absolute top-[5%] right-[15%] w-4 h-4 text-[#E6DFD9] doodle-float-delay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg>
-        <svg class="absolute top-[23%] right-[17%] w-4 h-4 text-[#E6DFD9] doodle-float" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        <svg class="absolute top-[48%] right-[17%] w-5 h-5 text-[#E6DFD9] doodle-float-delay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg>
-        <svg class="absolute top-[69%] right-[19%] w-5 h-5 text-[#E6DFD9] doodle-float" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-    </div>
+        <!-- Floating Outline Hearts Layer -->
+        <div id="heartsLayer" class="absolute inset-0 pointer-events-none overflow-hidden z-0"></div>
 
-    <!-- Main Centered Container (~480px width) -->
-    <main class="relative z-10 max-w-[480px] mx-auto px-4 pt-4 pb-24 space-y-4">
+        <!-- Top Content Wrapper -->
+        <div class="relative z-10">
 
-        <!-- 1. Sticky Top Header Card -->
-        <header class="sticky top-3 z-30 soft-card rounded-full px-5 py-3 flex items-center justify-between backdrop-blur-md bg-white/95">
-            <a href="#" id="header-shop-name" class="font-bold text-[19px] tracking-tight text-[#5A4E48]">Melou</a>
-            <button id="header-badge-btn" onclick="scrollToReviews()" class="bg-[#D5D0CD] hover:bg-[#C8C2BE] active:scale-95 transition text-[#5A4E48] font-semibold text-xs px-4 py-1.5 rounded-full">
-                credit
-            </button>
-        </header>
+            <!-- Admin Active Banner (Hidden until logged in) -->
+            <div id="adminActiveBar" class="hidden bg-[#2b2927] text-white px-4 py-2.5 items-center justify-between text-xs shadow-md">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="font-medium">โหมดแอดมินเปิดใช้งาน</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="openAdminDrawer()" class="bg-white text-[#2b2927] font-semibold px-3 py-1 rounded-full hover:bg-stone-100 transition">
+                        แก้ไขข้อมูล
+                    </button>
+                    <button onclick="logoutAdmin()" class="text-stone-300 hover:text-white px-2 py-1">
+                        ออก
+                    </button>
+                </div>
+            </div>
 
-        <!-- 2. Profile Card -->
-        <section class="soft-card rounded-[28px] p-3.5 space-y-4">
-            <!-- Banner Area (150px height matching reference) -->
-            <div id="banner-container" class="relative w-full h-[150px] rounded-[20px] border border-[#EFEAE6] banner-dots overflow-hidden flex flex-col items-center justify-center">
-                <!-- Custom Banner Image (Hidden if empty) -->
-                <img id="banner-image" src="" alt="Shop Banner" class="hidden absolute inset-0 w-full h-full object-cover">
-                
-                <!-- Default Dotted Banner Doodles (Visible when no custom banner image) -->
-                <div id="banner-default-art" class="flex flex-col items-center justify-center space-y-3 select-none">
-                    <svg class="w-4 h-4 text-[#D3CCC6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg>
-                    <div class="flex flex-col items-center">
-                        <svg class="w-4 h-4 text-[#D3CCC6] mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                        <span id="banner-watermark" class="text-[11px] font-medium text-[#B8B0AA] tracking-wide">Melou</span>
+            <!-- Top Header Area -->
+            <div class="header-banner relative pt-6 pb-2 px-6">
+                <!-- Top Icons Row -->
+                <div class="flex items-center justify-between">
+                    <!-- Top Left Heart Icon -->
+                    <button onclick="spawnBurstHearts()" aria-label="Send love" class="w-10 h-10 flex items-center justify-center rounded-full text-[#2b2927] hover:bg-black/5 active:scale-90 transition">
+                        <svg class="w-6 h-6 stroke-[2]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                        </svg>
+                    </button>
+
+                    <!-- Subtle Watermark Text in Banner -->
+                    <div class="text-center opacity-35 select-none pointer-events-none mt-4">
+                        <div class="text-[10px] leading-none mb-0.5">♡</div>
+                        <div id="bannerWatermark" class="text-[11px] tracking-widest font-medium">meloustudio</div>
                     </div>
-                    <svg class="w-3.5 h-3.5 text-[#D3CCC6] -translate-x-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg>
+
+                    <!-- Top Right Circular Music Toggle Button -->
+                    <button id="musicToggleBtn" onclick="toggleMusic()" aria-label="Toggle background music" class="w-11 h-11 rounded-full bg-white shadow-md border border-[#ece8e3] flex items-center justify-center text-[#2b2927] hover:scale-105 active:scale-95 transition">
+                        <svg id="musicIcon" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Center Profile Avatar & Right-side Admin Pill -->
+                <div class="relative mt-6 flex flex-col items-center">
+                    <!-- Decorative Heart near Avatar -->
+                    <div class="absolute right-2 top-3 text-[#2b2927] opacity-85 pointer-events-none">
+                        <svg class="w-6 h-6 stroke-[2]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                        </svg>
+                    </div>
+
+                    <!-- Profile Image Circle -->
+                    <div class="relative w-32 h-32 rounded-full bg-white avatar-ring overflow-hidden flex items-center justify-center">
+                        <img id="displayAvatar"
+                             src="https://placehold.co/300x300/f7f3f0/2b2927?text=Melou+Studio"
+                             onerror="this.onerror=null; this.src='https://placehold.co/300x300/f7f3f0/2b2927?text=Melou+Studio';"
+                             alt="Melou Studio Profile"
+                             class="w-full h-full object-cover object-center">
+                    </div>
+
+                    <!-- Pill-shaped Admin Button positioned to the right below profile picture -->
+                    <div class="w-full flex justify-end -mt-6 pr-1">
+                        <button onclick="openLoginModal()" class="soft-card px-3.5 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-semibold text-[#2b2927] hover:bg-stone-50 active:scale-95 transition z-20">
+                            <span class="w-4 h-4 rounded-full border border-[#2b2927] flex items-center justify-center text-[10px]">
+                                <i data-lucide="user" class="w-2.5 h-2.5"></i>
+                            </span>
+                            <span>admin</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Profile Header Text -->
+                <div class="text-center mt-4 space-y-1">
+                    <p id="displaySubtitle" class="text-[11px] font-semibold tracking-[0.2em] text-[#6e6a66] uppercase">
+                        PAY TO MELOU STUDIO
+                    </p>
+                    <h1 id="displayShopName" class="text-[24px] font-bold tracking-tight text-[#2b2927] leading-tight">
+                        MELOU STUDIO
+                    </h1>
+                    <p id="displayLineId" class="text-[13px] font-medium text-[#6e6a66]">
+                        line @052kxtuh
+                    </p>
                 </div>
             </div>
 
-            <!-- Overlapping Circular Avatar (96px) & Shop Name Row -->
-            <div class="px-2 flex items-end gap-3.5 -mt-10 relative z-10">
-                <div class="w-[96px] h-[96px] rounded-full p-1 bg-white border border-[#EFEAE6] shadow-sm shrink-0 overflow-hidden">
-                    <img id="profile-avatar" 
-                         src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80" 
-                         onerror="this.src='https://placehold.co/200x200/EFECE9/5A4E48?text=Melou'"
-                         alt="Melou Profile" 
-                         class="w-full h-full object-cover rounded-full">
-                </div>
-                <div class="pb-2">
-                    <h1 id="profile-shop-name" class="text-[22px] font-bold text-[#5A4E48] leading-tight">Melou</h1>
-                </div>
-            </div>
+            <!-- Main Body Content -->
+            <div class="px-5 mt-4 space-y-5">
 
-            <!-- Stats Row (REVIEWS & FOLLOWERS) -->
-            <div class="grid grid-cols-2 pt-1 pb-1 text-center">
+                <!-- Expandable Accordion Card -->
+                <div class="soft-card rounded-[24px] overflow-hidden">
+                    <button onclick="toggleNotice()" class="w-full px-5 py-4 flex items-center justify-between text-left focus:outline-none">
+                        <span class="w-5"></span>
+                        <span id="displayNoticeTitle" class="text-[14px] font-bold text-[#2b2927]">
+                            อ่านก่อนโอนนะคะ
+                        </span>
+                        <i id="noticeChevron" data-lucide="chevron-down" class="w-4 h-4 text-[#6e6a66] transition-transform duration-300"></i>
+                    </button>
+                    <div id="noticeContent" class="accordion-content">
+                        <div class="accordion-inner">
+                            <div class="px-5 pb-4 pt-1 border-t border-[#f3f0ec] text-[13px] text-[#57534e] leading-relaxed whitespace-pre-line" id="displayNoticeBody">
+• กรุณาตรวจสอบชื่อบัญชีและยอดเงินให้ถูกต้องก่อนโอนทุกครั้ง
+• โอนแล้วรบกวนส่งสลิปที่มี QR Code ชัดเจนในแชทนะคะ
+• หากโอนผิดบัญชีทางร้านขออนุญาตไม่รับผิดชอบทุกกรณีค่ะ ♡
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Methods Section -->
                 <div>
-                    <div id="stat-reviews" class="text-[18px] font-bold text-[#5A4E48]">100</div>
-                    <div class="text-[10px] font-semibold tracking-wider text-[#8E827B] uppercase mt-0.5">REVIEWS</div>
+                    <h2 class="text-[15px] font-bold text-[#2b2927] mb-3 px-1">
+                        เลือกช่องทางชำระเงิน
+                    </h2>
+
+                    <!-- 3-Column Payment Cards Grid -->
+                    <div class="grid grid-cols-3 gap-2.5">
+
+                        <!-- Card 1: Bank Transfer -->
+                        <button onclick="openPaymentModal('bank')" class="soft-card soft-card-hover rounded-[24px] py-4 px-2 flex flex-col items-center justify-between text-center min-h-[168px]">
+                            <div class="w-11 h-11 rounded-[15px] bg-[#f8f7f5] border border-[#efece8] flex items-center justify-center text-[#2b2927] mt-1">
+                                <i data-lucide="landmark" class="w-5 h-5 stroke-[1.8]"></i>
+                            </div>
+                            <div class="my-2">
+                                <div class="text-[13px] font-bold text-[#2b2927] leading-snug">โอนธนาคาร</div>
+                                <div id="displayBankShort" class="text-[10.5px] text-[#78736e] font-medium mt-0.5 line-clamp-1">
+                                    กสิกรไทย (KBANK)
+                                </div>
+                            </div>
+                            <div class="text-[10.5px] font-semibold text-[#2b2927] flex items-center gap-0.5">
+                                <span>แตะเพื่อดู</span>
+                                <span class="text-[11px]">›</span>
+                            </div>
+                        </button>
+
+                        <!-- Card 2: TrueMoney Wallet -->
+                        <button onclick="openPaymentModal('truemoney')" class="soft-card soft-card-hover rounded-[24px] py-4 px-2 flex flex-col items-center justify-between text-center min-h-[168px]">
+                            <div class="w-11 h-11 rounded-[15px] bg-[#f8f7f5] border border-[#efece8] flex items-center justify-center text-[#2b2927] mt-1">
+                                <i data-lucide="wallet" class="w-5 h-5 stroke-[1.8]"></i>
+                            </div>
+                            <div class="my-2">
+                                <div class="text-[13px] font-bold text-[#2b2927] leading-snug">ทรูมันนี่</div>
+                                <div class="text-[10.5px] text-[#78736e] font-medium mt-0.5 line-clamp-1">
+                                    TrueMoney Wallet
+                                </div>
+                            </div>
+                            <div class="text-[10.5px] font-semibold text-[#2b2927] flex items-center gap-0.5">
+                                <span>แตะเพื่อดู</span>
+                                <span class="text-[11px]">›</span>
+                            </div>
+                        </button>
+
+                        <!-- Card 3: QR Code -->
+                        <button onclick="openPaymentModal('qr')" class="soft-card soft-card-hover rounded-[24px] py-4 px-2 flex flex-col items-center justify-between text-center min-h-[168px]">
+                            <div class="w-11 h-11 rounded-[15px] bg-[#f8f7f5] border border-[#efece8] flex items-center justify-center text-[#2b2927] mt-1">
+                                <i data-lucide="qr-code" class="w-5 h-5 stroke-[1.8]"></i>
+                            </div>
+                            <div class="my-2">
+                                <div class="text-[13px] font-bold text-[#2b2927] leading-snug">QR Code</div>
+                                <div class="text-[10.5px] text-[#78736e] font-medium mt-0.5 line-clamp-1">
+                                    สแกนเพื่อชำระ
+                                </div>
+                            </div>
+                            <div class="text-[10.5px] font-semibold text-[#2b2927] flex items-center gap-0.5">
+                                <span>แตะเพื่อดู</span>
+                                <span class="text-[11px]">›</span>
+                            </div>
+                        </button>
+
+                    </div>
                 </div>
-                <div>
-                    <div id="stat-followers" class="text-[18px] font-bold text-[#5A4E48]">69</div>
-                    <div class="text-[10px] font-semibold tracking-wider text-[#8E827B] uppercase mt-0.5">FOLLOWERS</div>
+
+                <!-- Note Slip Pill Bar -->
+                <div class="soft-card rounded-full p-2 pl-3 flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-8 h-8 rounded-full bg-[#f7f5f3] border border-[#ece8e3] flex-shrink-0 flex items-center justify-center text-[#2b2927]">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                        </div>
+                        <div class="truncate">
+                            <div class="text-[10px] text-[#8a847e] font-medium leading-tight">Note Slip</div>
+                            <div id="displayNoteSlip" class="text-[12.5px] font-bold text-[#2b2927] truncate">
+                                ซื้อขายกับ Melou Studio
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        <span class="text-[#a8a29e] text-sm select-none">♡</span>
+                        <button onclick="copyTextById('displayNoteSlip', 'คัดลอก Note Slip แล้ว!')" class="bg-[#2b2927] hover:bg-[#3f3c39] active:scale-95 text-white text-[11.5px] font-semibold px-4 py-1.5 rounded-full transition shadow-sm">
+                            คัดลอก
+                        </button>
+                    </div>
                 </div>
+
             </div>
+        </div>
 
-            <!-- Follow Button -->
-            <div class="px-1">
-                <button id="follow-btn" onclick="toggleFollow()" class="w-full py-2.5 rounded-full bg-[#D5D0CD] hover:bg-[#C8C2BE] active:scale-[0.99] transition font-semibold text-sm text-[#5A4E48]">
-                    ติดตาม
-                </button>
-            </div>
-
-            <!-- Thin Divider & Credit Text -->
-            <div class="px-1 pt-2.5 border-t border-[#F4EFEA]">
-                <p id="credit-text" class="text-[13px] text-[#5A4E48]">thank you for credit ♡</p>
-            </div>
-        </section>
-
-        <!-- 3. Empty Aesthetic Pill Spacer (28px height matching reference) -->
-        <div class="soft-card rounded-full h-[28px] w-full" aria-hidden="true"></div>
-
-        <!-- 4. Write Review Card ("review for me") -->
-        <section id="review-form-section" class="soft-card rounded-[28px] p-5 space-y-3.5">
-            <h2 class="font-bold text-[17px] text-[#5A4E48]">review for me</h2>
-            
-            <div class="space-y-1.5">
-                <label class="block text-xs text-[#8E827B]">ให้คะแนนดาว:</label>
-                <div id="star-selector" class="flex items-center gap-1.5" role="radiogroup" aria-label="ให้คะแนนดาว">
-                    <button type="button" data-star="1" onclick="selectStar(1)" class="star-btn text-[#DFD9D4] hover:scale-110 transition p-0.5 focus:outline-none">
-                        <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    </button>
-                    <button type="button" data-star="2" onclick="selectStar(2)" class="star-btn text-[#DFD9D4] hover:scale-110 transition p-0.5 focus:outline-none">
-                        <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    </button>
-                    <button type="button" data-star="3" onclick="selectStar(3)" class="star-btn text-[#DFD9D4] hover:scale-110 transition p-0.5 focus:outline-none">
-                        <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    </button>
-                    <button type="button" data-star="4" onclick="selectStar(4)" class="star-btn text-[#DFD9D4] hover:scale-110 transition p-0.5 focus:outline-none">
-                        <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    </button>
-                    <button type="button" data-star="5" onclick="selectStar(5)" class="star-btn text-[#DFD9D4] hover:scale-110 transition p-0.5 focus:outline-none">
-                        <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    </button>
-                </div>
-            </div>
-
-            <form id="review-form" onsubmit="submitReview(event)" class="space-y-3">
-                <input type="text" id="reviewer-name" placeholder="ชื่อหรือโค้ดเนม" required maxlength="40"
-                       class="w-full px-4 py-3 rounded-2xl border border-[#EFEAE6] bg-white text-sm text-[#5A4E48] placeholder-[#B5ADA8] focus:outline-none focus:border-[#C8C2BE] transition">
-                
-                <textarea id="reviewer-comment" rows="3" placeholder="เขียนรีวิวของคุณที่นี่..." required maxlength="300"
-                          class="w-full px-4 py-3 rounded-2xl border border-[#EFEAE6] bg-white text-sm text-[#5A4E48] placeholder-[#B5ADA8] focus:outline-none focus:border-[#C8C2BE] transition resize-none"></textarea>
-
-                <button type="submit" id="submit-review-btn"
-                        class="w-full py-3 rounded-full bg-[#D5D0CD] hover:bg-[#C8C2BE] active:scale-[0.99] transition font-semibold text-sm text-[#5A4E48]">
-                    ส่งรีวิว
-                </button>
-            </form>
-        </section>
-
-        <!-- 5. Total Rating Card -->
-        <section class="soft-card rounded-[24px] py-4 px-5 text-center space-y-0.5">
-            <div class="text-[11px] font-medium text-[#8E827B]">ดาวทั้งหมด</div>
-            <div id="total-rating-percent" class="text-[20px] font-bold text-[#5A4E48]">96%</div>
-        </section>
-
-        <!-- 6. All Reviews Card -->
-        <section id="all-reviews-section" class="soft-card rounded-[28px] p-5 space-y-3.5">
-            <div class="flex items-center justify-between">
-                <h2 class="font-bold text-[17px] text-[#5A4E48]">รีวิวทั้งหมด</h2>
-                <span id="admin-badge-indicator" class="hidden text-[11px] bg-[#EFEAE6] text-[#5A4E48] px-2.5 py-0.5 rounded-full font-medium">Owner Mode (เข้าถึงเฉพาะคุณ)</span>
-            </div>
-
-            <!-- Reviews List Container -->
-            <div id="reviews-list" class="space-y-3">
-                <div class="text-center py-6 text-xs text-[#A39A95]">กำลังโหลดรีวิวน่ารักๆ...</div>
-            </div>
-        </section>
-
-        <!-- 7. Footer -->
-        <footer class="pt-3 pb-6 text-center">
-            <p id="footer-text" class="text-[11px] text-[#8E827B]">© 2026 Melou. crafted with love</p>
+        <!-- Footer Copyright -->
+        <footer class="relative z-10 text-center mt-8 px-4">
+            <p id="displayFooter" class="text-[11px] text-[#78736e] font-medium">
+                © 2026 Melou Studio. All rights reserved.
+            </p>
         </footer>
 
     </main>
 
-    <!-- Bottom-Left Floating Music Toggle Button -->
-    <button id="music-toggle-btn" onclick="toggleMusic()" title="เปิด/ปิดเพลงคลอเบาๆ"
-            class="fixed bottom-4 left-4 z-40 w-11 h-11 rounded-full bg-white border border-[#EFEAE6] shadow-md flex items-center justify-center text-[#5A4E48] hover:scale-105 active:scale-95 transition">
-        <!-- Music Off Icon (default) -->
-        <svg id="music-icon-off" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18V5l12-2v13"></path>
-            <circle cx="6" cy="18" r="3"></circle>
-            <circle cx="18" cy="16" r="3"></circle>
-            <line x1="2" y1="2" x2="22" y2="22"></line>
-        </svg>
-        <!-- Music On Icon -->
-        <svg id="music-icon-on" class="hidden w-5 h-5 text-[#9B8579] animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18V5l12-2v13"></path>
-            <circle cx="6" cy="18" r="3"></circle>
-            <circle cx="18" cy="16" r="3"></circle>
-        </svg>
-    </button>
-    <audio id="custom-audio-player" loop preload="none"></audio>
+    <!-- ===================================================================== -->
+    <!-- PAYMENT DETAILS MODAL -->
+    <!-- ===================================================================== -->
+    <div id="paymentModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-[2px] p-4">
+        <div class="bg-white w-full max-w-[360px] rounded-[28px] p-6 shadow-2xl border border-[#ece8e3] transform transition-all scale-95 opacity-0" id="paymentModalBox">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2.5">
+                    <div id="modalIconWrap" class="w-10 h-10 rounded-2xl bg-[#f7f5f3] flex items-center justify-center text-[#2b2927]"></div>
+                    <div>
+                        <h3 id="modalTitle" class="text-base font-bold text-[#2b2927]">ช่องทางชำระเงิน</h3>
+                        <p id="modalSub" class="text-xs text-[#78736e]">รายละเอียดบัญชี</p>
+                    </div>
+                </div>
+                <button onclick="closePaymentModal()" class="w-8 h-8 rounded-full bg-[#f5f3f0] flex items-center justify-center text-[#57534e] hover:bg-[#eae6e0]">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
 
-    <!-- Bottom-Right Floating Owner / Profile Pill Button -->
-    <button onclick="openOwnerModal()"
-            class="fixed bottom-4 right-4 z-40 bg-white border border-[#EFEAE6] shadow-md rounded-full pl-3 pr-4 py-2 flex items-center gap-2 text-[#5A4E48] hover:scale-105 active:scale-95 transition">
-        <span class="w-6 h-6 rounded-full border border-[#D5D0CD] flex items-center justify-center text-[#8E827B]">
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-        </span>
-        <span id="floating-owner-name" class="text-xs font-bold">Melou</span>
-    </button>
+            <!-- Dynamic Modal Content -->
+            <div id="modalBody" class="space-y-3"></div>
 
-    <!-- Toast Notification (Replaces alert()) -->
-    <div id="toast-box" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-all duration-300 transform -translate-y-2">
-        <div id="toast-message" class="bg-[#5A4E48] text-white text-xs font-medium px-4 py-2.5 rounded-full shadow-lg">
-            บันทึกแล้ว!
-        </div>
-    </div>
-
-    <!-- Owner Login & Single-Access Editor Modal -->
-    <div id="owner-modal" class="hidden fixed inset-0 z-50 bg-black/30 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white border border-[#EFEAE6] rounded-[28px] w-full max-w-[440px] p-6 shadow-xl space-y-5 my-8 relative">
-            
-            <!-- Close Button -->
-            <button onclick="closeOwnerModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#FAF7F5] hover:bg-[#EFEAE6] flex items-center justify-center text-[#8E827B] transition">
-                ✕
+            <button onclick="closePaymentModal()" class="w-full mt-5 py-2.5 rounded-full bg-[#f5f3f0] hover:bg-[#ebe7e1] text-[#2b2927] text-xs font-bold transition">
+                ปิดหน้าต่าง
             </button>
+        </div>
+    </div>
 
-            <!-- Step 1: Single-Owner Password & UID Verification View -->
-            <div id="owner-login-view" class="space-y-4">
-                <div class="text-center space-y-1">
-                    <div class="w-12 h-12 rounded-full bg-[#FAF7F5] mx-auto flex items-center justify-center text-[#5A4E48] mb-2">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                    </div>
-                    <h3 class="font-bold text-lg text-[#5A4E48]">เข้าสู่ระบบเจ้าของร้าน (Single-Owner)</h3>
-                    <p id="owner-lock-status-text" class="text-xs text-[#8E827B]">เฉพาะเจ้าของร้านคนเดียวเท่านั้นที่สามารถแก้ไขข้อมูลได้ (รหัสเริ่มต้น: 1234)</p>
+    <!-- ===================================================================== -->
+    <!-- ADMIN LOGIN MODAL -->
+    <!-- ===================================================================== -->
+    <div id="loginModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-[2px] p-4">
+        <div class="bg-white w-full max-w-[340px] rounded-[28px] p-6 shadow-2xl border border-[#ece8e3]">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-base font-bold text-[#2b2927] flex items-center gap-2">
+                    <i data-lucide="lock" class="w-4 h-4"></i> เข้าสู่ระบบแอดมิน
+                </h3>
+                <button onclick="closeLoginModal()" class="w-8 h-8 rounded-full bg-[#f5f3f0] flex items-center justify-center text-[#57534e]">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <p class="text-xs text-[#78736e] mb-4">
+                กรอกรหัสผ่านสำหรับเจ้าของร้านเพื่อแก้ไขข้อมูลและเปลี่ยนรหัสผ่าน
+            </p>
+            <form onsubmit="submitAdminLogin(event)" class="space-y-3">
+                <div>
+                    <input type="password" id="adminPasswordInput" placeholder="กรอกรหัสผ่านแอดมิน..." required
+                           class="w-full px-4 py-2.5 rounded-2xl bg-[#f8f7f5] border border-[#e5e1dc] text-sm focus:outline-none focus:border-[#2b2927]">
+                    <p id="loginErrorText" class="hidden text-[11px] text-rose-500 font-semibold mt-1">
+                        รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง
+                    </p>
                 </div>
+                <button type="submit" class="w-full py-2.5 rounded-full bg-[#2b2927] hover:bg-[#3f3c39] text-white text-xs font-bold transition shadow-md">
+                    เข้าสู่ระบบ
+                </button>
+            </form>
+        </div>
+    </div>
 
-                <form onsubmit="verifyOwnerPassword(event)" class="space-y-3">
-                    <input type="password" id="owner-password-input" placeholder="กรอกรหัสผ่านเจ้าของร้าน" required
-                           class="w-full px-4 py-3 rounded-2xl border border-[#EFEAE6] text-sm text-center tracking-widest focus:outline-none focus:border-[#C8C2BE]">
-                    <button type="submit" class="w-full py-3 rounded-2xl bg-[#5A4E48] hover:bg-[#463C37] text-white font-semibold text-sm transition">
-                        ยืนยันตัวตนเจ้าของร้าน
-                    </button>
-                </form>
+    <!-- ===================================================================== -->
+    <!-- ADMIN EDIT & SETTINGS DRAWER MODAL -->
+    <!-- ===================================================================== -->
+    <div id="adminDrawer" class="fixed inset-0 z-50 hidden items-end sm:items-center justify-center bg-black/45 backdrop-blur-[2px] p-0 sm:p-4">
+        <div class="bg-white w-full max-w-[430px] max-h-[90vh] rounded-t-[32px] sm:rounded-[32px] shadow-2xl border border-[#ece8e3] flex flex-col overflow-hidden">
+
+            <!-- Drawer Header -->
+            <div class="px-6 py-4 border-b border-[#f0ece6] flex items-center justify-between bg-[#fdfcfb]">
+                <div>
+                    <h3 class="text-base font-bold text-[#2b2927]">จัดการข้อมูลร้าน (Admin)</h3>
+                    <p class="text-[11px] text-[#78736e]">แก้ไขได้ทุกส่วนและส่งออกไฟล์ไปอัปขึ้นเว็บได้เลย</p>
+                </div>
+                <button onclick="closeAdminDrawer()" class="w-8 h-8 rounded-full bg-[#f5f3f0] flex items-center justify-center text-[#57534e]">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
             </div>
 
-            <!-- Step 2: Owner Dashboard & Editor View -->
-            <div id="owner-editor-view" class="hidden space-y-4 max-h-[82vh] overflow-y-auto pr-1">
-                <div class="flex items-center justify-between border-b border-[#EFEAE6] pb-3">
-                    <div>
-                        <h3 class="font-bold text-lg text-[#5A4E48]">ตั้งค่าร้าน Melou</h3>
-                        <p class="text-[11px] text-emerald-600 font-medium">🔒 ล็อกสิทธิ์เฉพาะบัญชีของคุณคนเดียวแล้ว</p>
-                    </div>
-                    <button onclick="logoutOwner()" class="text-[11px] text-rose-500 hover:underline font-medium">ปิดหน้าต่างแก้ไข</button>
-                </div>
+            <!-- Drawer Scrollable Form -->
+            <div class="p-6 overflow-y-auto space-y-5 text-xs">
 
-                <!-- Live Preview & Image Upload Section -->
-                <div class="grid grid-cols-2 gap-3 bg-[#FAF7F5] p-3 rounded-2xl border border-[#EFEAE6]">
-                    <!-- Avatar Upload + Preview -->
-                    <div class="space-y-2 text-center">
-                        <label class="block text-xs font-semibold text-[#5A4E48]">รูปโปรไฟล์ (Avatar)</label>
-                        <img id="preview-edit-avatar" src="https://placehold.co/150x150/EFEAE6/5A4E48?text=Avatar" class="w-16 h-16 rounded-full object-cover mx-auto border-2 border-white shadow-xs">
-                        <input type="file" id="edit-avatar-file" accept="image/*" onchange="handleImageUpload(event, 'avatar')" class="hidden">
-                        <button type="button" onclick="document.getElementById('edit-avatar-file').click()" class="w-full py-1.5 px-2 rounded-xl bg-white border border-[#D5D0CD] text-[11px] font-medium text-[#5A4E48] hover:bg-[#F5F2EF] transition">
-                            📁 เลือกรูปโปรไฟล์
-                        </button>
-                        <input type="text" id="edit-avatar-url" oninput="updateLiveImagePreview('avatar', this.value)" placeholder="หรือวางลิงก์รูป URL" class="w-full px-2.5 py-1 rounded-lg border border-[#EFEAE6] bg-white text-[11px]">
-                    </div>
-
-                    <!-- Banner Upload + Preview -->
-                    <div class="space-y-2 text-center">
-                        <label class="block text-xs font-semibold text-[#5A4E48]">รูปแบนเนอร์ (Banner)</label>
-                        <div class="w-full h-16 rounded-xl overflow-hidden border-2 border-white shadow-xs banner-dots flex items-center justify-center bg-white">
-                            <img id="preview-edit-banner" src="" class="hidden w-full h-full object-cover">
-                            <span id="preview-edit-banner-placeholder" class="text-[10px] text-[#8E827B]">ลายจุดมินิมอล</span>
-                        </div>
-                        <input type="file" id="edit-banner-file" accept="image/*" onchange="handleImageUpload(event, 'banner')" class="hidden">
-                        <button type="button" onclick="document.getElementById('edit-banner-file').click()" class="w-full py-1.5 px-2 rounded-xl bg-white border border-[#D5D0CD] text-[11px] font-medium text-[#5A4E48] hover:bg-[#F5F2EF] transition">
-                            🖼️ เลือกรูปแบนเนอร์
-                        </button>
-                        <div class="flex gap-1">
-                            <input type="text" id="edit-banner-url" oninput="updateLiveImagePreview('banner', this.value)" placeholder="URL แบนเนอร์" class="w-full px-2 py-1 rounded-lg border border-[#EFEAE6] bg-white text-[11px]">
-                            <button type="button" onclick="resetBannerImage()" title="กลับไปใช้ลายจุด" class="px-2 rounded-lg bg-white border border-[#EFEAE6] text-[10px] text-[#8E827B] hover:text-rose-500">ลบ</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Shop Texts -->
-                <div class="space-y-2.5">
-                    <div class="grid grid-cols-2 gap-2.5">
-                        <div>
-                            <label class="block text-xs font-medium text-[#5A4E48] mb-1">ชื่อร้าน (Shop Name)</label>
-                            <input type="text" id="edit-shop-name" class="w-full px-3.5 py-2 rounded-xl border border-[#EFEAE6] text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-[#5A4E48] mb-1">ปุ่มมุมขวาบน</label>
-                            <input type="text" id="edit-header-badge" placeholder="credit" class="w-full px-3.5 py-2 rounded-xl border border-[#EFEAE6] text-sm">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2.5">
-                        <div>
-                            <label class="block text-xs font-medium text-[#5A4E48] mb-1">ยอดรีวิวเริ่มต้น (บวกเพิ่ม)</label>
-                            <input type="number" id="edit-base-reviews" class="w-full px-3.5 py-2 rounded-xl border border-[#EFEAE6] text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-[#5A4E48] mb-1">ยอดผู้ติดตาม (Followers)</label>
-                            <input type="number" id="edit-followers" class="w-full px-3.5 py-2 rounded-xl border border-[#EFEAE6] text-sm">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2.5">
-                        <div>
-                            <label class="block text-xs font-medium text-[#5A4E48] mb-1">ข้อความปุ่มติดตาม</label>
-                            <input type="text" id="edit-follow-label" placeholder="ติดตาม" class="w-full px-3.5 py-2 rounded-xl border border-[#EFEAE6] text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-[#5A4E48] mb-1">ข้อความเครดิต</label>
-                            <input type="text" id="edit-credit-text" class="w-full px-3.5 py-2 rounded-xl border border-[#EFEAE6] text-sm">
-                        </div>
-                    </div>
+                <!-- 1. Profile & Header -->
+                <div class="space-y-3 bg-[#faf9f7] p-4 rounded-2xl border border-[#eeeae4]">
+                    <h4 class="font-bold text-[#2b2927] text-sm flex items-center gap-1.5">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i> ข้อมูลโปรไฟล์ & หน้าร้าน
+                    </h4>
 
                     <div>
-                        <label class="block text-xs font-medium text-[#5A4E48] mb-1">ข้อความท้ายเว็บ (Footer)</label>
-                        <input type="text" id="edit-footer-text" class="w-full px-3.5 py-2 rounded-xl border border-[#EFEAE6] text-sm">
+                        <label class="block font-semibold text-[#57534e] mb-1">เปลี่ยนรูปโปรไฟล์ (อัปโหลดรูปใหม่)</label>
+                        <input type="file" accept="image/*" onchange="handleImageUpload(event, 'avatar')"
+                               class="block w-full text-[11px] text-[#57534e] file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#2b2927] file:text-white hover:file:bg-[#3f3c39] cursor-pointer">
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2.5">
+                    <div class="grid grid-cols-1 gap-2.5">
                         <div>
-                            <label class="block text-xs font-medium text-[#5A4E48] mb-1">ลิงก์เพลง MP3 (ไม่ใส่=กล่องดนตรี)</label>
-                            <input type="url" id="edit-music-url" placeholder="https://...mp3" class="w-full px-3.5 py-2 rounded-xl border border-[#EFEAE6] text-xs">
+                            <label class="block font-semibold text-[#57534e] mb-1">ข้อความเล็กด้านบน (Subtitle)</label>
+                            <input type="text" id="editSubtitle" class="w-full px-3.5 py-2 rounded-xl bg-white border border-[#e5e1dc]">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-[#5A4E48] mb-1">เปลี่ยนรหัสผ่านใหม่</label>
-                            <input type="text" id="edit-new-password" placeholder="ตั้งรหัสใหม่ที่นี่" class="w-full px-3.5 py-2 rounded-xl border border-[#EFEAE6] text-xs">
+                            <label class="block font-semibold text-[#57534e] mb-1">ชื่อร้านหลัก (Main Title)</label>
+                            <input type="text" id="editShopName" class="w-full px-3.5 py-2 rounded-xl bg-white border border-[#e5e1dc]">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-[#57534e] mb-1">ช่องทางติดต่อ / LINE</label>
+                            <input type="text" id="editLineId" class="w-full px-3.5 py-2 rounded-xl bg-white border border-[#e5e1dc]">
                         </div>
                     </div>
                 </div>
 
-                <!-- Save Button -->
-                <div class="pt-1 space-y-2">
-                    <button type="button" id="save-settings-btn" onclick="saveShopSettings()"
-                            class="w-full py-3 rounded-2xl bg-[#5A4E48] hover:bg-[#463C37] active:scale-[0.99] text-white font-semibold text-sm shadow-sm transition">
-                        บันทึกการเปลี่ยนแปลง (Save Changes)
-                    </button>
-                    <button type="button" onclick="releaseDeviceLock()"
-                            class="w-full py-2 rounded-xl bg-[#FAF7F5] hover:bg-[#EFEAE6] text-[11px] text-[#8E827B] transition">
-                        ย้ายเครื่อง / ปลดล็อกสิทธิ์เครื่องนี้ (กรณีต้องการล็อกอินเครื่องอื่น)
+                <!-- 2. Notice Accordion -->
+                <div class="space-y-2.5 bg-[#faf9f7] p-4 rounded-2xl border border-[#eeeae4]">
+                    <h4 class="font-bold text-[#2b2927] text-sm flex items-center gap-1.5">
+                        <i data-lucide="info" class="w-4 h-4"></i> กล่องข้อความ "อ่านก่อนโอนนะคะ"
+                    </h4>
+                    <div>
+                        <label class="block font-semibold text-[#57534e] mb-1">หัวข้อปุ่ม</label>
+                        <input type="text" id="editNoticeTitle" class="w-full px-3.5 py-2 rounded-xl bg-white border border-[#e5e1dc]">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-[#57534e] mb-1">รายละเอียดด้านใน</label>
+                        <textarea id="editNoticeBody" rows="3" class="w-full px-3.5 py-2 rounded-xl bg-white border border-[#e5e1dc]"></textarea>
+                    </div>
+                </div>
+
+                <!-- 3. Bank Transfer -->
+                <div class="space-y-2.5 bg-[#faf9f7] p-4 rounded-2xl border border-[#eeeae4]">
+                    <h4 class="font-bold text-[#2b2927] text-sm flex items-center gap-1.5">
+                        <i data-lucide="landmark" class="w-4 h-4"></i> ข้อมูลบัญชีธนาคาร
+                    </h4>
+                    <div>
+                        <label class="block font-semibold text-[#57534e] mb-1">ชื่อธนาคาร (เช่น กสิกรไทย (KBANK))</label>
+                        <input type="text" id="editBankName" class="w-full px-3.5 py-2 rounded-xl bg-white border border-[#e5e1dc]">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-[#57534e] mb-1">เลขที่บัญชี</label>
+                        <input type="text" id="editBankNumber" class="w-full px-3.5 py-2 rounded-xl bg-white border border-[#e5e1dc]">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-[#57534e] mb-1">ชื่อบัญชี</label>
+                        <input type="text" id="editBankAccountName" class="w-full px-3.5 py-2 rounded-xl bg-white border border-[#e5e1dc]">
+                    </div>
+                </div>
+
+                <!-- 4. TrueMoney Wallet -->
+                <div class="space-y-2.5 bg-[#faf9f7] p-4 rounded-2xl border border-[#eeeae4]">
+                    <h4 class="font-bold text-[#2b2927] text-sm flex items-center gap-1.5">
+                        <i data-lucide="wallet" class="w-4 h-4"></i> ข้อมูล TrueMoney Wallet
+                    </h4>
+                    <div>
+                        <label class="block font-semibold text-[#57534e] mb-1">เบอร์โทรศัพท์รับเงิน</label>
+                        <input type="text" id="editTrueMoneyPhone" class="w-full px-3.5 py-2 rounded-xl bg-white border border-[#e5e1dc]">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-[#57534e] mb-1">ชื่อบัญชีทรูมันนี่</label>
+                        <input type="text" id="editTrueMoneyName" class="w-full px-3.5 py-2 rounded-xl bg-white border border-[#e5e1dc]">
+                    </div>
+                </div>
+
+                <!-- 5. QR Code Upload -->
+                <div class="space-y-2.5 bg-[#faf9f7] p-4 rounded-2xl border border-[#eeeae4]">
+                    <h4 class="font-bold text-[#2b2927] text-sm flex items-center gap-1.5">
+                        <i data-lucide="qr-code" class="w-4 h-4"></i> รูปภาพ QR Code รับเงิน
+                    </h4>
+                    <input type="file" accept="image/*" onchange="handleImageUpload(event, 'qr')"
+                           class="block w-full text-[11px] text-[#57534e] file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#2b2927] file:text-white hover:file:bg-[#3f3c39] cursor-pointer">
+                    <p class="text-[11px] text-[#8a847e]">* อัปโหลดรูปคิวอาร์โค้ดพร้อมเพย์หรือธนาคารของร้านได้เลย</p>
+                </div>
+
+                <!-- 6. Note Slip & Footer -->
+                <div class="space-y-2.5 bg-[#faf9f7] p-4 rounded-2xl border border-[#eeeae4]">
+                    <h4 class="font-bold text-[#2b2927] text-sm flex items-center gap-1.5">
+                        <i data-lucide="file-text" class="w-4 h-4"></i> Note Slip & ข้อความท้ายเว็บ
+                    </h4>
+                    <div>
+                        <label class="block font-semibold text-[#57534e] mb-1">ข้อความ Note Slip</label>
+                        <input type="text" id="editNoteSlip" class="w-full px-3.5 py-2 rounded-xl bg-white border border-[#e5e1dc]">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-[#57534e] mb-1">ข้อความ Footer ด้านล่าง</label>
+                        <input type="text" id="editFooter" class="w-full px-3.5 py-2 rounded-xl bg-white border border-[#e5e1dc]">
+                    </div>
+                </div>
+
+                <!-- 7. Change Admin Password -->
+                <div class="space-y-2.5 bg-[#fff8f6] p-4 rounded-2xl border border-[#f2ded9]">
+                    <h4 class="font-bold text-[#2b2927] text-sm flex items-center gap-1.5">
+                        <i data-lucide="key-round" class="w-4 h-4"></i> เปลี่ยนรหัสผ่านแอดมิน (รู้คนเดียว)
+                    </h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="password" id="newPasswordInput" placeholder="รหัสผ่านใหม่" class="w-full px-3.5 py-2 rounded-xl bg-white border border-[#e5e1dc]">
+                        <input type="password" id="confirmPasswordInput" placeholder="ยืนยันรหัสใหม่" class="w-full px-3.5 py-2 rounded-xl bg-white border border-[#e5e1dc]">
+                    </div>
+                    <button type="button" onclick="changeAdminPassword()" class="px-4 py-1.5 rounded-full bg-[#2b2927] text-white font-semibold text-[11px] hover:bg-[#3f3c39]">
+                        บันทึกรหัสผ่านใหม่
                     </button>
                 </div>
 
-                <!-- Manage Reviews Quick List -->
-                <div class="pt-3 border-t border-[#EFEAE6] space-y-2">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-[#5A4E48]">จัดการรีวิวทั้งหมด</span>
-                        <span class="text-[11px] text-[#8E827B]">แก้ไขหรือลบรีวิวได้ทันที</span>
-                    </div>
-                    <div id="admin-reviews-manager" class="space-y-2 max-h-44 overflow-y-auto pr-1">
-                        <!-- Populated dynamically -->
-                    </div>
-                </div>
+            </div>
+
+            <!-- Drawer Footer Actions -->
+            <div class="p-4 border-t border-[#f0ece6] bg-white space-y-2">
+                <button onclick="saveAdminChanges()" class="w-full py-2.5 rounded-full bg-[#2b2927] hover:bg-[#3f3c39] text-white text-xs font-bold transition shadow">
+                    บันทึกการแก้ไขลงหน้าเว็บนี้
+                </button>
+                <button onclick="exportStandaloneHTML()" class="w-full py-2.5 rounded-full bg-[#f3efe9] hover:bg-[#e8e2d9] text-[#2b2927] text-xs font-bold transition flex items-center justify-center gap-1.5">
+                    <i data-lucide="download" class="w-3.5 h-3.5"></i> ดาวน์โหลดไฟล์ index.html (สำหรับอัปขึ้นเว็บให้ลูกค้าเห็น)
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Edit Single Review Modal (For Owner) -->
-    <div id="edit-review-modal" class="hidden fixed inset-0 z-50 bg-black/30 backdrop-blur-xs flex items-center justify-center p-4">
-        <div class="bg-white border border-[#EFEAE6] rounded-[24px] w-full max-w-[380px] p-5 shadow-xl space-y-3.5">
-            <h4 class="font-bold text-base text-[#5A4E48]">แก้ไขรีวิว</h4>
-            <input type="hidden" id="edit-rev-id">
-            <div>
-                <label class="block text-xs text-[#8E827B] mb-1">ชื่อผู้รีวิว</label>
-                <input type="text" id="edit-rev-name" class="w-full px-3.5 py-2 rounded-xl border border-[#EFEAE6] text-sm">
-            </div>
-            <div>
-                <label class="block text-xs text-[#8E827B] mb-1">จำนวนดาว (1-5)</label>
-                <select id="edit-rev-stars" class="w-full px-3.5 py-2 rounded-xl border border-[#EFEAE6] text-sm bg-white">
-                    <option value="5">★★★★★ (5 ดาว)</option>
-                    <option value="4">★★★★☆ (4 ดาว)</option>
-                    <option value="3">★★★☆☆ (3 ดาว)</option>
-                    <option value="2">★★☆☆☆ (2 ดาว)</option>
-                    <option value="1">★☆☆☆☆ (1 ดาว)</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-xs text-[#8E827B] mb-1">วันที่ (เช่น 17/11/2026)</label>
-                <input type="text" id="edit-rev-date" class="w-full px-3.5 py-2 rounded-xl border border-[#EFEAE6] text-sm">
-            </div>
-            <div>
-                <label class="block text-xs text-[#8E827B] mb-1">ข้อความรีวิว</label>
-                <textarea id="edit-rev-comment" rows="3" class="w-full px-3.5 py-2 rounded-xl border border-[#EFEAE6] text-sm resize-none"></textarea>
-            </div>
-            <div class="flex gap-2 pt-1">
-                <button type="button" onclick="closeEditReviewModal()" class="flex-1 py-2.5 rounded-xl bg-[#FAF7F5] text-xs font-semibold text-[#5A4E48]">ยกเลิก</button>
-                <button type="button" onclick="saveEditedReview()" class="flex-1 py-2.5 rounded-xl bg-[#5A4E48] text-xs font-semibold text-white">บันทึก</button>
-            </div>
+    <!-- ===================================================================== -->
+    <!-- TOAST NOTIFICATION -->
+    <!-- ===================================================================== -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] pointer-events-none opacity-0 transition-all duration-300 translate-y-3">
+        <div class="bg-[#2b2927] text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-lg flex items-center gap-2">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+            <span id="toastMessage">คัดลอกเรียบร้อยแล้ว!</span>
         </div>
     </div>
 
-    <!-- Firebase & Application Logic -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot, collection, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <!-- ===================================================================== -->
+    <!-- APPLICATION LOGIC -->
+    <!-- ===================================================================== -->
+    <script>
+        // Default SHA-256 hash corresponds to "0903"
+        const DEFAULT_PASSWORD_HASH = "90a1fb63e15ccfb9ec0fece0d1fb8deb78be2df610d4e3ae4d59ca1c2d30e510";
 
-        // Environment Config
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'melou-shop-default';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-
-        let db = null;
-        let auth = null;
-        let currentUser = null;
-        let isOwnerAuthenticated = false;
-        let isFollowingSession = false;
-        let selectedStars = 0;
-
-        // Default Shop Configuration (Melou)
-        let shopConfig = {
-            shopName: "Melou",
-            headerBadgeText: "credit",
-            avatarUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80",
-            bannerUrl: "",
-            baseReviewsOffset: 90, // 90 + 10 initial reviews = 100 matching reference
-            followers: 69,
-            followBtnLabel: "ติดตาม",
-            creditText: "thank you for credit ♡",
-            footerText: "© 2026 Melou. crafted with love",
-            musicUrl: "",
-            ownerPassword: "1234",
-            ownerUid: "" // Single-Owner Lock UID
+        const DEFAULT_STATE = {
+            passwordHash: DEFAULT_PASSWORD_HASH,
+            avatar: "https://placehold.co/300x300/f7f3f0/2b2927?text=Melou+Studio",
+            subtitle: "PAY TO MELOU STUDIO",
+            shopName: "MELOU STUDIO",
+            lineId: "line @052kxtuh",
+            noticeTitle: "อ่านก่อนโอนนะคะ",
+            noticeBody: "• กรุณาตรวจสอบชื่อบัญชีและยอดเงินให้ถูกต้องก่อนโอนทุกครั้ง\n• โอนแล้วรบกวนส่งสลิปที่มี QR Code ชัดเจนในแชทนะคะ\n• หากโอนผิดบัญชีทางร้านขออนุญาตไม่รับผิดชอบทุกกรณีค่ะ ♡",
+            bankName: "กสิกรไทย (KBANK)",
+            bankNumber: "123-4-56789-0",
+            bankAccountName: "บจก. เมลู สตูดิโอ",
+            trueMoneyPhone: "089-123-4567",
+            trueMoneyName: "Melou Studio",
+            qrImage: "",
+            noteSlip: "ซื้อขายกับ Melou Studio",
+            footer: "© 2026 Melou Studio. All rights reserved."
         };
 
-        // Initial Reviews combining the Thai & English reviews from the reference screenshots
-        const defaultInitialReviews = [
-            { name: "วาริน", stars: 5, date: "17/11/2026", comment: "บริการดี งานไวค่ะ", createdAt: 1794910010 },
-            { name: "ufa", stars: 4, date: "17/11/2026", comment: "แม่ค้าน่ารักมากค่ะ งานไว", createdAt: 1794910009 },
-            { name: "ส้มส้ม", stars: 5, date: "17/11/2026", comment: "แม่ค้าน่ารักมากคับบ ไว้ใจได้ค่ะ >.<", createdAt: 1794910008 },
-            { name: "จันจิ", stars: 5, date: "15/11/2026", comment: "แม่ค้าน่ารักมากๆ ตอบไวมากกกก", createdAt: 1794910007 },
-            { name: "지민", stars: 5, date: "15/11/2026", comment: "สั่งหลายรอบแล้วค่ะ ดีเหมือนเดิม", createdAt: 1794910006 },
-            { name: "Jiaxin", stars: 5, date: "14/10/2026", comment: "plus one ka แม่ค้าไวมาก ฟิน 🤎", createdAt: 1794910005 },
-            { name: "เจ้าขา", stars: 5, date: "13/10/2026", comment: "ร้านน่ารักมาก", createdAt: 1794910004 },
-            { name: "บักโซ", stars: 5, date: "13/10/2026", comment: "งานไว แม่ค้าใจดี พูดเพราะ", createdAt: 1794910003 },
-            { name: "raynz", stars: 5, date: "12/10/2026", comment: "+1 เมื่อกี้ให้ดาวผิด แม่ค้าน่ารักมากๆคับบ", createdAt: 1794910002 },
-            { name: "คาราเมล", stars: 5, date: "12/10/2026", comment: "+1 บริการน่ารักค่า", createdAt: 1794910001 }
-        ];
+        const STORAGE_KEY = "melou_studio_bio_state_v3";
+        let appState = { ...DEFAULT_STATE };
+        let isAuthorizedSession = false;
 
-        let allReviews = [];
-
-        // Show friendly toast message
-        window.showToast = function(msg) {
-            const box = document.getElementById('toast-box');
-            const text = document.getElementById('toast-message');
-            text.textContent = msg;
-            box.classList.remove('opacity-0', '-translate-y-2');
-            box.classList.add('opacity-100', 'translate-y-0');
-            setTimeout(() => {
-                box.classList.remove('opacity-100', 'translate-y-0');
-                box.classList.add('opacity-0', '-translate-y-2');
-            }, 2800);
-        };
-
-        // Smooth scroll to reviews section
-        window.scrollToReviews = function() {
-            document.getElementById('review-form-section').scrollIntoView({ behavior: 'smooth' });
-        };
-
-        // Star Selection UI
-        window.selectStar = function(count) {
-            selectedStars = count;
-            const buttons = document.querySelectorAll('#star-selector .star-btn');
-            buttons.forEach((btn, idx) => {
-                if (idx < count) {
-                    btn.classList.remove('text-[#DFD9D4]');
-                    btn.classList.add('text-[#C5B9B0]');
-                } else {
-                    btn.classList.remove('text-[#C5B9B0]');
-                    btn.classList.add('text-[#DFD9D4]');
-                }
-            });
-        };
-
-        // Render Shop Profile UI from shopConfig
-        function renderShopConfig() {
-            const name = shopConfig.shopName || 'Melou';
-            document.getElementById('header-shop-name').textContent = name;
-            document.getElementById('header-badge-btn').textContent = shopConfig.headerBadgeText || 'credit';
-            document.getElementById('profile-shop-name').textContent = name;
-            document.getElementById('banner-watermark').textContent = name;
-            document.getElementById('floating-owner-name').textContent = name;
-            document.title = `${name} — Credit & Reviews`;
-
-            document.getElementById('profile-avatar').src = shopConfig.avatarUrl || 'https://placehold.co/200x200/EFEAE6/5A4E48?text=Melou';
-
-            const bannerImg = document.getElementById('banner-image');
-            const bannerArt = document.getElementById('banner-default-art');
-            if (shopConfig.bannerUrl && shopConfig.bannerUrl.trim() !== '') {
-                bannerImg.src = shopConfig.bannerUrl;
-                bannerImg.classList.remove('hidden');
-                bannerArt.classList.add('hidden');
-            } else {
-                bannerImg.classList.add('hidden');
-                bannerArt.classList.remove('hidden');
-            }
-
-            document.getElementById('stat-followers').textContent = shopConfig.followers ?? 69;
-            if (!isFollowingSession) {
-                document.getElementById('follow-btn').textContent = shopConfig.followBtnLabel || 'ติดตาม';
-            }
-            document.getElementById('credit-text').textContent = shopConfig.creditText || '';
-            document.getElementById('footer-text').textContent = shopConfig.footerText || '';
-
-            updateStatsAndRating();
-        }
-
-        // Calculate Total Reviews & Total Rating Percentage
-        function updateStatsAndRating() {
-            const totalCount = (Number(shopConfig.baseReviewsOffset) || 0) + allReviews.length;
-            document.getElementById('stat-reviews').textContent = totalCount;
-
-            if (allReviews.length === 0) {
-                document.getElementById('total-rating-percent').textContent = '96%';
-                return;
-            }
-            const sumStars = allReviews.reduce((acc, r) => acc + (Number(r.stars) || 5), 0);
-            const avgPercent = Math.round((sumStars / (allReviews.length * 5)) * 100);
-            document.getElementById('total-rating-percent').textContent = `${avgPercent}%`;
-        }
-
-        // Render Star Icons HTML for each review
-        function renderStarsHtml(count) {
-            let html = '<span class="inline-flex items-center gap-0.5 ml-1.5">';
-            for (let i = 1; i <= 5; i++) {
-                const colorClass = i <= count ? 'text-[#BDB3AC]' : 'text-[#E7E2DE]';
-                html += `<svg class="w-3 h-3 ${colorClass} fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
-            }
-            html += '</span>';
-            return html;
-        }
-
-        // Escape HTML to prevent XSS
-        function escapeHtml(str) {
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
-        }
-
-        // Render Reviews List
-        function renderReviews() {
-            const listEl = document.getElementById('reviews-list');
-            const adminListEl = document.getElementById('admin-reviews-manager');
-
-            const sorted = [...allReviews].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-
-            if (sorted.length === 0) {
-                listEl.innerHTML = `<div class="text-center py-6 text-xs text-[#A39A95]">ยังไม่มีรีวิว มาเป็นคนแรกที่รีวิวให้ร้านนะคะ ♡</div>`;
-                adminListEl.innerHTML = `<div class="text-xs text-[#A39A95]">ยังไม่มีรีวิว</div>`;
-                return;
-            }
-
-            listEl.innerHTML = sorted.map(rev => `
-                <article class="rounded-[20px] border border-[#EFEAE6] bg-white p-4 space-y-1.5 transition hover:border-[#DFD9D4]">
-                    <div class="flex items-center justify-between gap-2">
-                        <div class="flex items-center flex-wrap">
-                            <span class="font-bold text-[13.5px] text-[#5A4E48]">${escapeHtml(rev.name)}</span>
-                            ${renderStarsHtml(rev.stars)}
-                        </div>
-                        <span class="text-[11px] text-[#A39A95] shrink-0">${escapeHtml(rev.date)}</span>
-                    </div>
-                    <p class="text-[13px] text-[#6E645F] leading-relaxed break-words">${escapeHtml(rev.comment)}</p>
-                    ${isOwnerAuthenticated ? `
-                        <div class="pt-2 flex items-center justify-end gap-2 border-t border-[#FAF7F5]">
-                            <button onclick="openEditReviewModal('${rev.id}')" class="text-[11px] px-2.5 py-1 rounded-lg bg-[#FAF7F5] text-[#5A4E48] hover:bg-[#EFEAE6]">แก้ไข</button>
-                            <button onclick="deleteReview('${rev.id}')" class="text-[11px] px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100">ลบ</button>
-                        </div>
-                    ` : ''}
-                </article>
-            `).join('');
-
-            adminListEl.innerHTML = sorted.map(rev => `
-                <div class="flex items-center justify-between bg-[#FAF7F5] px-3 py-2 rounded-xl border border-[#EFEAE6] text-xs">
-                    <div class="truncate pr-2">
-                        <span class="font-bold text-[#5A4E48]">${escapeHtml(rev.name)}</span>
-                        <span class="text-[#8E827B] ml-1">(${rev.stars}★) - ${escapeHtml(rev.comment)}</span>
-                    </div>
-                    <div class="flex items-center gap-1 shrink-0">
-                        <button type="button" onclick="openEditReviewModal('${rev.id}')" class="px-2 py-1 rounded-lg bg-white border border-[#EFEAE6] text-[#5A4E48]">แก้</button>
-                        <button type="button" onclick="deleteReview('${rev.id}')" class="px-2 py-1 rounded-lg bg-rose-50 text-rose-600">ลบ</button>
-                    </div>
-                </div>
-            `).join('');
-
-            updateStatsAndRating();
-        }
-
-        function getTodayFormatted() {
-            const d = new Date();
-            const day = String(d.getDate()).padStart(2, '0');
-            const month = String(d.getMonth() + 1).padStart(2, '0');
-            const year = d.getFullYear();
-            return `${day}/${month}/${year}`;
-        }
-
-        // Submit New Review
-        window.submitReview = async function(e) {
-            e.preventDefault();
-            if (selectedStars === 0) {
-                showToast('กรุณาเลือกให้คะแนนดาวก่อนส่งรีวิวนะคะ ♡');
-                return;
-            }
-            const nameInput = document.getElementById('reviewer-name');
-            const commentInput = document.getElementById('reviewer-comment');
-            const submitBtn = document.getElementById('submit-review-btn');
-
-            const newReview = {
-                name: nameInput.value.trim(),
-                stars: selectedStars,
-                date: getTodayFormatted(),
-                comment: commentInput.value.trim(),
-                createdAt: Date.now()
-            };
-
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'กำลังส่งรีวิว...';
-
+        // SHA-256 Hashing Helper using Web Crypto API (with fallback)
+        async function hashPassword(plainText) {
             try {
-                if (db && currentUser) {
-                    const reviewsCol = collection(db, 'artifacts', appId, 'public', 'data', 'reviews');
-                    await addDoc(reviewsCol, newReview);
-                } else {
-                    newReview.id = 'local-' + Date.now();
-                    allReviews.unshift(newReview);
-                    renderReviews();
+                const encoder = new TextEncoder();
+                const data = encoder.encode(plainText);
+                const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+            } catch (e) {
+                let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+                for (let i = 0; i < plainText.length; i++) {
+                    const ch = plainText.charCodeAt(i);
+                    h1 = Math.imul(h1 ^ ch, 2654435761);
+                    h2 = Math.imul(h2 ^ ch, 1597334677);
                 }
-
-                nameInput.value = '';
-                commentInput.value = '';
-                selectStar(0);
-                showToast('ขอบคุณสำหรับรีวิวน่ารักๆ นะคะ ♡');
-            } catch (err) {
-                console.error('Error adding review:', err);
-                showToast('เกิดข้อผิดพลาดในการส่งรีวิว กรุณาลองใหม่');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'ส่งรีวิว';
+                h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+                h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+                return "fb_" + (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
             }
-        };
+        }
 
-        // Follow Button Interaction
-        window.toggleFollow = async function() {
-            const btn = document.getElementById('follow-btn');
-            if (isFollowingSession) return;
+        // Initialize App on Load
+        window.addEventListener("DOMContentLoaded", () => {
+            isAuthorizedSession = false;
+            loadState();
+            renderUI();
+            initFloatingHearts();
+            lucide.createIcons();
+        });
 
-            isFollowingSession = true;
-            btn.textContent = 'ติดตามแล้ว ♡';
-            btn.classList.remove('bg-[#D5D0CD]', 'hover:bg-[#C8C2BE]');
-            btn.classList.add('bg-[#EAE4E0]', 'text-[#6E645F]');
-
-            const updatedFollowers = (Number(shopConfig.followers) || 0) + 1;
-            shopConfig.followers = updatedFollowers;
-            document.getElementById('stat-followers').textContent = updatedFollowers;
-
+        function loadState() {
             try {
-                if (db && currentUser) {
-                    const configDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'shop_settings', 'main');
-                    await setDoc(configDocRef, { followers: increment(1) }, { merge: true });
-                }
-                showToast('ขอบคุณที่กดติดตามร้านนะคะ ♡');
-            } catch (err) {
-                console.error('Follow update error:', err);
-            }
-        };
-
-        // Single-Owner Access Modal Controls
-        window.openOwnerModal = function() {
-            document.getElementById('owner-modal').classList.remove('hidden');
-            const myUid = currentUser ? currentUser.uid : 'local-owner';
-
-            // Check if already authenticated in this session
-            if (isOwnerAuthenticated) {
-                showEditorView();
-                return;
-            }
-
-            // Show login view with single-owner lock status
-            document.getElementById('owner-login-view').classList.remove('hidden');
-            document.getElementById('owner-editor-view').classList.add('hidden');
-            document.getElementById('owner-password-input').value = '';
-
-            const statusEl = document.getElementById('owner-lock-status-text');
-            if (shopConfig.ownerUid && shopConfig.ownerUid !== '' && shopConfig.ownerUid !== myUid) {
-                statusEl.innerHTML = `<span class="text-rose-500 font-semibold">⚠️ ร้านนี้ถูกล็อกสิทธิ์โดยเจ้าของร้านแล้ว</span><br>เฉพาะบัญชีเจ้าของร้านคนเดียวเท่านั้นที่สามารถแก้ไขได้`;
-            } else if (shopConfig.ownerUid === myUid) {
-                statusEl.textContent = 'บัญชีนี้ได้รับการยืนยันเป็นเจ้าของร้านแล้ว กรอกรหัสผ่านเพื่อแก้ไข';
-            } else {
-                statusEl.textContent = 'เข้าสู่ระบบครั้งแรกเพื่อผูกสิทธิ์เจ้าของร้านคนเดียว (รหัสเริ่มต้น: 1234)';
-            }
-        };
-
-        window.closeOwnerModal = function() {
-            document.getElementById('owner-modal').classList.add('hidden');
-        };
-
-        // Verify Single-Owner UID + Master Password
-        window.verifyOwnerPassword = async function(e) {
-            e.preventDefault();
-            const entered = document.getElementById('owner-password-input').value;
-            const currentPass = shopConfig.ownerPassword || '1234';
-            const myUid = currentUser ? currentUser.uid : 'local-owner';
-
-            // Enforce Single-Owner Lock: If claimed by another UID, block access!
-            if (shopConfig.ownerUid && shopConfig.ownerUid !== '' && shopConfig.ownerUid !== myUid) {
-                showToast('⛔ ไม่มีสิทธิ์เข้าถึง: เว็บนี้ถูกล็อกเฉพาะเจ้าของร้านคนเดียวเท่านั้น');
-                return;
-            }
-
-            if (entered !== currentPass) {
-                showToast('รหัสผ่านไม่ถูกต้อง (รหัสเริ่มต้นคือ 1234)');
-                return;
-            }
-
-            // Claim ownership if not yet claimed
-            if (!shopConfig.ownerUid || shopConfig.ownerUid === '') {
-                shopConfig.ownerUid = myUid;
-                if (db && currentUser) {
-                    try {
-                        const configDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'shop_settings', 'main');
-                        await setDoc(configDocRef, { ownerUid: myUid }, { merge: true });
-                    } catch (err) {
-                        console.error('Claim owner UID error:', err);
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.passwordHash === "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4") {
+                        parsed.passwordHash = "90a1fb63e15ccfb9ec0fece0d1fb8deb78be2df610d4e3ae4d59ca1c2d30e510";
                     }
+                    appState = { ...DEFAULT_STATE, ...parsed };
                 }
+            } catch (e) {
+                console.warn("Could not read localStorage:", e);
             }
-
-            isOwnerAuthenticated = true;
-            document.getElementById('admin-badge-indicator').classList.remove('hidden');
-            showEditorView();
-            renderReviews();
-            showToast('ยืนยันตัวตนเจ้าของร้านสำเร็จ ✨');
-        };
-
-        window.logoutOwner = function() {
-            isOwnerAuthenticated = false;
-            document.getElementById('admin-badge-indicator').classList.add('hidden');
-            renderReviews();
-            closeOwnerModal();
-            showToast('ออกจากโหมดแก้ไขแล้ว');
-        };
-
-        // Allow owner to release device lock if switching devices
-        window.releaseDeviceLock = async function() {
-            if (!isOwnerAuthenticated) return;
-            try {
-                shopConfig.ownerUid = '';
-                if (db && currentUser) {
-                    const configDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'shop_settings', 'main');
-                    await setDoc(configDocRef, { ownerUid: '' }, { merge: true });
-                }
-                isOwnerAuthenticated = false;
-                document.getElementById('admin-badge-indicator').classList.add('hidden');
-                renderReviews();
-                closeOwnerModal();
-                showToast('ปลดล็อกสิทธิ์เครื่องนี้แล้ว สามารถล็อกอินจากเครื่องใหม่ได้');
-            } catch (err) {
-                console.error('Release lock error:', err);
-                showToast('เกิดข้อผิดพลาด กรุณาลองใหม่');
-            }
-        };
-
-        function showEditorView() {
-            document.getElementById('owner-login-view').classList.add('hidden');
-            document.getElementById('owner-editor-view').classList.remove('hidden');
-
-            document.getElementById('edit-shop-name').value = shopConfig.shopName || 'Melou';
-            document.getElementById('edit-header-badge').value = shopConfig.headerBadgeText || 'credit';
-            document.getElementById('edit-avatar-url').value = shopConfig.avatarUrl || '';
-            document.getElementById('edit-banner-url').value = shopConfig.bannerUrl || '';
-            document.getElementById('edit-base-reviews').value = shopConfig.baseReviewsOffset ?? 90;
-            document.getElementById('edit-followers').value = shopConfig.followers ?? 69;
-            document.getElementById('edit-follow-label').value = shopConfig.followBtnLabel || 'ติดตาม';
-            document.getElementById('edit-credit-text').value = shopConfig.creditText || '';
-            document.getElementById('edit-footer-text').value = shopConfig.footerText || '';
-            document.getElementById('edit-music-url').value = shopConfig.musicUrl || '';
-            document.getElementById('edit-new-password').value = '';
-
-            updateLiveImagePreview('avatar', shopConfig.avatarUrl || '');
-            updateLiveImagePreview('banner', shopConfig.bannerUrl || '');
         }
 
-        // Update Live Preview inside Owner Editor Modal
-        window.updateLiveImagePreview = function(type, url) {
-            if (type === 'avatar') {
-                const img = document.getElementById('preview-edit-avatar');
-                img.src = url && url.trim() !== '' ? url : 'https://placehold.co/150x150/EFEAE6/5A4E48?text=Avatar';
-            } else {
-                const img = document.getElementById('preview-edit-banner');
-                const placeholder = document.getElementById('preview-edit-banner-placeholder');
-                if (url && url.trim() !== '') {
-                    img.src = url;
-                    img.classList.remove('hidden');
-                    placeholder.classList.add('hidden');
-                } else {
-                    img.classList.add('hidden');
-                    placeholder.classList.remove('hidden');
-                }
+        function persistState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+            } catch (e) {
+                showToast("บันทึกในเบราว์เซอร์ไม่สำเร็จ (ไฟล์รูปอาจใหญ่เกินไป)");
             }
-        };
+        }
 
-        window.resetBannerImage = function() {
-            document.getElementById('edit-banner-url').value = '';
-            updateLiveImagePreview('banner', '');
-        };
+        // Render State onto DOM
+        function renderUI() {
+            const avatarEl = document.getElementById("displayAvatar");
+            if (appState.avatar && !appState.avatar.startsWith("data:")) {
+                avatarEl.src = appState.avatar;
+            } else if (appState.avatar && appState.avatar.startsWith("data:")) {
+                avatarEl.src = appState.avatar;
+            }
 
-        // Compress & Convert Uploaded Image to Compact Base64 (<100KB) for 100% Reliable Firestore Save
-        window.handleImageUpload = function(event, targetType) {
+            document.getElementById("displaySubtitle").textContent = appState.subtitle;
+            document.getElementById("displayShopName").textContent = appState.shopName;
+            document.getElementById("bannerWatermark").textContent = appState.shopName.toLowerCase().replace(/\s+/g, '');
+            document.getElementById("displayLineId").textContent = appState.lineId;
+            document.getElementById("displayNoticeTitle").textContent = appState.noticeTitle;
+            document.getElementById("displayNoticeBody").textContent = appState.noticeBody;
+            document.getElementById("displayBankShort").textContent = appState.bankName;
+            document.getElementById("displayNoteSlip").textContent = appState.noteSlip;
+            document.getElementById("displayFooter").textContent = appState.footer;
+
+            const adminBar = document.getElementById("adminActiveBar");
+            if (isAuthorizedSession) {
+                adminBar.classList.remove("hidden");
+                adminBar.classList.add("flex");
+            } else {
+                adminBar.classList.add("hidden");
+                adminBar.classList.remove("flex");
+            }
+        }
+
+        // =====================================================================
+        // ADMIN AUTHENTICATION & EDITING
+        // =====================================================================
+        function openLoginModal() {
+            isAuthorizedSession = false;
+            renderUI();
+            document.getElementById("adminPasswordInput").value = "";
+            document.getElementById("loginErrorText").classList.add("hidden");
+            const modal = document.getElementById("loginModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+            setTimeout(() => document.getElementById("adminPasswordInput").focus(), 100);
+        }
+
+        function closeLoginModal() {
+            const modal = document.getElementById("loginModal");
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        }
+
+        async function submitAdminLogin(e) {
+            e.preventDefault();
+            const input = document.getElementById("adminPasswordInput").value;
+            if (!input) return;
+
+            const trimmedInput = input.trim();
+            const inputHash = await hashPassword(trimmedInput);
+            const rawHash = await hashPassword(input);
+
+            const isMatch =
+                inputHash === appState.passwordHash ||
+                rawHash === appState.passwordHash ||
+                trimmedInput === appState.passwordHash ||
+                input === appState.passwordHash;
+
+            if (isMatch) {
+                isAuthorizedSession = true;
+                closeLoginModal();
+                renderUI();
+                showToast("ยืนยันรหัสผ่านสำเร็จ!");
+                openAdminDrawer();
+            } else {
+                isAuthorizedSession = false;
+                renderUI();
+                document.getElementById("loginErrorText").classList.remove("hidden");
+                document.getElementById("adminPasswordInput").value = "";
+                document.getElementById("adminPasswordInput").focus();
+            }
+        }
+
+        function logoutAdmin() {
+            isAuthorizedSession = false;
+            closeAdminDrawer();
+            renderUI();
+            showToast("ออกจากโหมดแอดมินแล้ว");
+        }
+
+        function openAdminDrawer() {
+            if (!isAuthorizedSession) {
+                openLoginModal();
+                return;
+            }
+            document.getElementById("editSubtitle").value = appState.subtitle;
+            document.getElementById("editShopName").value = appState.shopName;
+            document.getElementById("editLineId").value = appState.lineId;
+            document.getElementById("editNoticeTitle").value = appState.noticeTitle;
+            document.getElementById("editNoticeBody").value = appState.noticeBody;
+            document.getElementById("editBankName").value = appState.bankName;
+            document.getElementById("editBankNumber").value = appState.bankNumber;
+            document.getElementById("editBankAccountName").value = appState.bankAccountName;
+            document.getElementById("editTrueMoneyPhone").value = appState.trueMoneyPhone;
+            document.getElementById("editTrueMoneyName").value = appState.trueMoneyName;
+            document.getElementById("editNoteSlip").value = appState.noteSlip;
+            document.getElementById("editFooter").value = appState.footer;
+
+            const drawer = document.getElementById("adminDrawer");
+            drawer.classList.remove("hidden");
+            drawer.classList.add("flex");
+        }
+
+        function closeAdminDrawer() {
+            const drawer = document.getElementById("adminDrawer");
+            drawer.classList.add("hidden");
+            drawer.classList.remove("flex");
+        }
+
+        function handleImageUpload(event, targetField) {
+            if (!isAuthorizedSession) return;
             const file = event.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const maxW = targetType === 'avatar' ? 400 : 800;
-                    const maxH = targetType === 'avatar' ? 400 : 400;
-                    const quality = targetType === 'avatar' ? 0.8 : 0.75;
-
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > maxW || height > maxH) {
-                        const ratio = Math.min(maxW / width, maxH / height);
-                        width = Math.round(width * ratio);
-                        height = Math.round(height * ratio);
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
-                    if (targetType === 'avatar') {
-                        document.getElementById('edit-avatar-url').value = compressedDataUrl;
-                        updateLiveImagePreview('avatar', compressedDataUrl);
-                    } else {
-                        document.getElementById('edit-banner-url').value = compressedDataUrl;
-                        updateLiveImagePreview('banner', compressedDataUrl);
-                    }
-                    showToast('อัปโหลดและปรับขนาดรูปภาพสำเร็จ กดบันทึกด้านล่างได้เลย ✨');
-                };
-                img.src = e.target.result;
+                if (targetField === "avatar") {
+                    appState.avatar = e.target.result;
+                    document.getElementById("displayAvatar").src = appState.avatar;
+                    showToast("อัปเดตรูปโปรไฟล์แล้ว!");
+                } else if (targetField === "qr") {
+                    appState.qrImage = e.target.result;
+                    showToast("อัปเดตรูป QR Code แล้ว!");
+                }
+                persistState();
             };
             reader.readAsDataURL(file);
-        };
+        }
 
-        // Save All Shop Settings to Firestore (Protected by Single-Owner Check)
-        window.saveShopSettings = async function() {
-            const myUid = currentUser ? currentUser.uid : 'local-owner';
-            if (!isOwnerAuthenticated || (shopConfig.ownerUid && shopConfig.ownerUid !== myUid)) {
-                showToast('⛔ ไม่มีสิทธิ์บันทึกข้อมูล');
+        async function changeAdminPassword() {
+            if (!isAuthorizedSession) return;
+            const newPassRaw = document.getElementById("newPasswordInput").value;
+            const confirmPassRaw = document.getElementById("confirmPasswordInput").value;
+            const newPass = newPassRaw.trim();
+            const confirmPass = confirmPassRaw.trim();
+
+            if (!newPass) {
+                showToast("กรุณากรอกรหัสผ่านใหม่");
+                return;
+            }
+            if (newPass !== confirmPass) {
+                showToast("รหัสผ่านยืนยันไม่ตรงกัน!");
                 return;
             }
 
-            const saveBtn = document.getElementById('save-settings-btn');
-            saveBtn.disabled = true;
-            saveBtn.textContent = 'กำลังบันทึกข้อมูล...';
+            const newHash = await hashPassword(newPass);
+            appState.passwordHash = newHash;
+            DEFAULT_STATE.passwordHash = newHash;
 
-            const newPasswordVal = document.getElementById('edit-new-password').value.trim();
+            persistState();
+            renderUI();
+            document.getElementById("newPasswordInput").value = "";
+            document.getElementById("confirmPasswordInput").value = "";
+            showToast("เปลี่ยนรหัสผ่านใหม่เรียบร้อยแล้ว! ใช้รหัสใหม่ได้เลย");
+        }
 
-            const updatedData = {
-                shopName: document.getElementById('edit-shop-name').value.trim() || 'Melou',
-                headerBadgeText: document.getElementById('edit-header-badge').value.trim() || 'credit',
-                avatarUrl: document.getElementById('edit-avatar-url').value.trim(),
-                bannerUrl: document.getElementById('edit-banner-url').value.trim(),
-                baseReviewsOffset: parseInt(document.getElementById('edit-base-reviews').value, 10) || 0,
-                followers: parseInt(document.getElementById('edit-followers').value, 10) || 0,
-                followBtnLabel: document.getElementById('edit-follow-label').value.trim() || 'ติดตาม',
-                creditText: document.getElementById('edit-credit-text').value,
-                footerText: document.getElementById('edit-footer-text').value,
-                musicUrl: document.getElementById('edit-music-url').value.trim(),
-                ownerPassword: newPasswordVal !== '' ? newPasswordVal : (shopConfig.ownerPassword || '1234'),
-                ownerUid: myUid
-            };
+        function saveAdminChanges() {
+            if (!isAuthorizedSession) return;
+            appState.subtitle = document.getElementById("editSubtitle").value;
+            appState.shopName = document.getElementById("editShopName").value;
+            appState.lineId = document.getElementById("editLineId").value;
+            appState.noticeTitle = document.getElementById("editNoticeTitle").value;
+            appState.noticeBody = document.getElementById("editNoticeBody").value;
+            appState.bankName = document.getElementById("editBankName").value;
+            appState.bankNumber = document.getElementById("editBankNumber").value;
+            appState.bankAccountName = document.getElementById("editBankAccountName").value;
+            appState.trueMoneyPhone = document.getElementById("editTrueMoneyPhone").value;
+            appState.trueMoneyName = document.getElementById("editTrueMoneyName").value;
+            appState.noteSlip = document.getElementById("editNoteSlip").value;
+            appState.footer = document.getElementById("editFooter").value;
 
-            try {
-                shopConfig = { ...shopConfig, ...updatedData };
-                renderShopConfig();
+            persistState();
+            renderUI();
+            closeAdminDrawer();
+            showToast("บันทึกข้อมูลเรียบร้อยแล้ว!");
+        }
 
-                if (db && currentUser) {
-                    const configDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'shop_settings', 'main');
-                    await setDoc(configDocRef, updatedData, { merge: true });
-                }
+        function exportStandaloneHTML() {
+            if (!isAuthorizedSession) return;
+            appState.subtitle = document.getElementById("editSubtitle").value;
+            appState.shopName = document.getElementById("editShopName").value;
+            appState.lineId = document.getElementById("editLineId").value;
+            appState.noticeTitle = document.getElementById("editNoticeTitle").value;
+            appState.noticeBody = document.getElementById("editNoticeBody").value;
+            appState.bankName = document.getElementById("editBankName").value;
+            appState.bankNumber = document.getElementById("editBankNumber").value;
+            appState.bankAccountName = document.getElementById("editBankAccountName").value;
+            appState.trueMoneyPhone = document.getElementById("editTrueMoneyPhone").value;
+            appState.trueMoneyName = document.getElementById("editTrueMoneyName").value;
+            appState.noteSlip = document.getElementById("editNoteSlip").value;
+            appState.footer = document.getElementById("editFooter").value;
 
-                showToast('บันทึกข้อมูลลงฐานข้อมูลเรียบร้อยแล้ว! ✨');
-                closeOwnerModal();
-            } catch (err) {
-                console.error('Error saving settings:', err);
-                showToast('บันทึกไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
-            } finally {
-                saveBtn.disabled = false;
-                saveBtn.textContent = 'บันทึกการเปลี่ยนแปลง (Save Changes)';
+            persistState();
+            renderUI();
+
+            const clonedDoc = document.documentElement.cloneNode(true);
+            const adminDrawerClone = clonedDoc.querySelector("#adminDrawer");
+            if (adminDrawerClone) {
+                adminDrawerClone.classList.add("hidden");
+                adminDrawerClone.classList.remove("flex");
             }
-        };
-
-        // Delete Review (Owner Only)
-        window.deleteReview = async function(reviewId) {
-            if (!isOwnerAuthenticated) return;
-            try {
-                if (db && currentUser && !reviewId.startsWith('local-')) {
-                    const revDoc = doc(db, 'artifacts', appId, 'public', 'data', 'reviews', reviewId);
-                    await deleteDoc(revDoc);
-                } else {
-                    allReviews = allReviews.filter(r => r.id !== reviewId);
-                    renderReviews();
-                }
-                showToast('ลบรีวิวเรียบร้อยแล้ว');
-            } catch (err) {
-                console.error('Delete review error:', err);
-                showToast('ไม่สามารถลบรีวิวได้');
+            const loginModalClone = clonedDoc.querySelector("#loginModal");
+            if (loginModalClone) {
+                loginModalClone.classList.add("hidden");
+                loginModalClone.classList.remove("flex");
             }
-        };
-
-        // Open Edit Review Modal (Owner Only)
-        window.openEditReviewModal = function(reviewId) {
-            if (!isOwnerAuthenticated) return;
-            const rev = allReviews.find(r => r.id === reviewId);
-            if (!rev) return;
-            document.getElementById('edit-rev-id').value = rev.id;
-            document.getElementById('edit-rev-name').value = rev.name;
-            document.getElementById('edit-rev-stars').value = rev.stars;
-            document.getElementById('edit-rev-date').value = rev.date;
-            document.getElementById('edit-rev-comment').value = rev.comment;
-            document.getElementById('edit-review-modal').classList.remove('hidden');
-        };
-
-        window.closeEditReviewModal = function() {
-            document.getElementById('edit-review-modal').classList.add('hidden');
-        };
-
-        window.saveEditedReview = async function() {
-            if (!isOwnerAuthenticated) return;
-            const id = document.getElementById('edit-rev-id').value;
-            const updatedFields = {
-                name: document.getElementById('edit-rev-name').value.trim(),
-                stars: parseInt(document.getElementById('edit-rev-stars').value, 10) || 5,
-                date: document.getElementById('edit-rev-date').value.trim(),
-                comment: document.getElementById('edit-rev-comment').value.trim()
-            };
-
-            try {
-                if (db && currentUser && !id.startsWith('local-')) {
-                    const revDoc = doc(db, 'artifacts', appId, 'public', 'data', 'reviews', id);
-                    await updateDoc(revDoc, updatedFields);
-                } else {
-                    const idx = allReviews.findIndex(r => r.id === id);
-                    if (idx !== -1) allReviews[idx] = { ...allReviews[idx], ...updatedFields };
-                    renderReviews();
-                }
-                closeEditReviewModal();
-                showToast('อัปเดตรีวิวเรียบร้อยแล้ว ✨');
-            } catch (err) {
-                console.error('Update review error:', err);
-                showToast('เกิดข้อผิดพลาดในการแก้ไขรีวิว');
+            const adminBarClone = clonedDoc.querySelector("#adminActiveBar");
+            if (adminBarClone) {
+                adminBarClone.classList.add("hidden");
+                adminBarClone.classList.remove("flex");
             }
-        };
 
-        // Background Music Player
+            let htmlSource = "<!DOCTYPE html>\n" + clonedDoc.outerHTML;
+            const stateJson = JSON.stringify(appState, null, 12);
+            htmlSource = htmlSource.replace(
+                /const DEFAULT_STATE = \{[\s\S]*?\};/,
+                `const DEFAULT_STATE = ${stateJson};`
+            );
+
+            const blob = new Blob([htmlSource], { type: "text/html;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "index.html";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            closeAdminDrawer();
+            showToast("ดาวน์โหลดไฟล์ index.html สำเร็จ!");
+        }
+
+        // =====================================================================
+        // NOTICE ACCORDION & PAYMENT MODALS
+        // =====================================================================
+        function toggleNotice() {
+            const content = document.getElementById("noticeContent");
+            const chevron = document.getElementById("noticeChevron");
+            content.classList.toggle("open");
+            chevron.classList.toggle("rotate-180");
+        }
+
+        function openPaymentModal(type) {
+            const modal = document.getElementById("paymentModal");
+            const box = document.getElementById("paymentModalBox");
+            const title = document.getElementById("modalTitle");
+            const sub = document.getElementById("modalSub");
+            const iconWrap = document.getElementById("modalIconWrap");
+            const body = document.getElementById("modalBody");
+
+            if (type === "bank") {
+                title.textContent = "โอนเงินผ่านธนาคาร";
+                sub.textContent = appState.bankName;
+                iconWrap.innerHTML = `<i data-lucide="landmark" class="w-5 h-5"></i>`;
+                body.innerHTML = `
+                    <div class="bg-[#faf9f7] border border-[#ece8e3] rounded-2xl p-4 space-y-2.5 text-xs">
+                        <div>
+                            <div class="text-[#8a847e]">ธนาคาร</div>
+                            <div class="font-bold text-[#2b2927] text-sm mt-0.5">${escapeHTML(appState.bankName)}</div>
+                        </div>
+                        <div class="flex items-center justify-between gap-2 pt-1 border-t border-[#f0ece6]">
+                            <div>
+                                <div class="text-[#8a847e]">เลขที่บัญชี</div>
+                                <div id="modalCopyBankNo" class="font-bold text-[#2b2927] text-base tracking-wide mt-0.5">${escapeHTML(appState.bankNumber)}</div>
+                            </div>
+                            <button onclick="copyTextById('modalCopyBankNo', 'คัดลอกเลขบัญชีแล้ว!')" class="bg-[#2b2927] text-white text-[11px] font-semibold px-3.5 py-1.5 rounded-full hover:bg-[#3f3c39] transition">
+                                คัดลอก
+                            </button>
+                        </div>
+                        <div class="pt-1 border-t border-[#f0ece6]">
+                            <div class="text-[#8a847e]">ชื่อบัญชี</div>
+                            <div class="font-semibold text-[#2b2927] text-xs mt-0.5">${escapeHTML(appState.bankAccountName)}</div>
+                        </div>
+                    </div>
+                `;
+            } else if (type === "truemoney") {
+                title.textContent = "ทรูมันนี่ วอลเล็ท";
+                sub.textContent = "TrueMoney Wallet";
+                iconWrap.innerHTML = `<i data-lucide="wallet" class="w-5 h-5"></i>`;
+                body.innerHTML = `
+                    <div class="bg-[#faf9f7] border border-[#ece8e3] rounded-2xl p-4 space-y-2.5 text-xs">
+                        <div class="flex items-center justify-between gap-2">
+                            <div>
+                                <div class="text-[#8a847e]">เบอร์วอลเล็ต</div>
+                                <div id="modalCopyWalletNo" class="font-bold text-[#2b2927] text-base tracking-wide mt-0.5">${escapeHTML(appState.trueMoneyPhone)}</div>
+                            </div>
+                            <button onclick="copyTextById('modalCopyWalletNo', 'คัดลอกเบอร์วอลเล็ตแล้ว!')" class="bg-[#2b2927] text-white text-[11px] font-semibold px-3.5 py-1.5 rounded-full hover:bg-[#3f3c39] transition">
+                                คัดลอก
+                            </button>
+                        </div>
+                        <div class="pt-1 border-t border-[#f0ece6]">
+                            <div class="text-[#8a847e]">ชื่อบัญชี</div>
+                            <div class="font-semibold text-[#2b2927] text-xs mt-0.5">${escapeHTML(appState.trueMoneyName)}</div>
+                        </div>
+                    </div>
+                `;
+            } else if (type === "qr") {
+                title.textContent = "สแกน QR Code";
+                sub.textContent = "พร้อมเพย์ / ชำระผ่าน QR";
+                iconWrap.innerHTML = `<i data-lucide="qr-code" class="w-5 h-5"></i>`;
+                const qrSrc = appState.qrImage || "https://placehold.co/260x260/faf9f7/2b2927?text=QR+Code";
+                body.innerHTML = `
+                    <div class="bg-[#faf9f7] border border-[#ece8e3] rounded-2xl p-4 flex flex-col items-center text-center space-y-2">
+                        <img src="${qrSrc}" alt="Payment QR Code" class="w-48 h-48 object-contain rounded-xl bg-white p-2 border border-[#efece8]">
+                        <p class="text-[11px] text-[#78736e]">บันทึกภาพหน้าจอแล้วสแกนผ่านแอปธนาคารได้เลยค่ะ</p>
+                    </div>
+                `;
+            }
+
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+            lucide.createIcons();
+            requestAnimationFrame(() => {
+                box.classList.remove("scale-95", "opacity-0");
+                box.classList.add("scale-100", "opacity-100");
+            });
+        }
+
+        function closePaymentModal() {
+            const modal = document.getElementById("paymentModal");
+            const box = document.getElementById("paymentModalBox");
+            box.classList.remove("scale-100", "opacity-100");
+            box.classList.add("scale-95", "opacity-0");
+            setTimeout(() => {
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
+            }, 180);
+        }
+
+        // =====================================================================
+        // AMBIENT SOUND & FLOATING HEARTS
+        // =====================================================================
+        let audioCtx = null;
+        let chimeInterval = null;
         let isMusicPlaying = false;
-        let toneLoop = null;
-        let toneSynth = null;
 
-        window.toggleMusic = async function() {
-            const iconOff = document.getElementById('music-icon-off');
-            const iconOn = document.getElementById('music-icon-on');
-            const audioEl = document.getElementById('custom-audio-player');
-
-            if (!isMusicPlaying) {
-                isMusicPlaying = true;
-                iconOff.classList.add('hidden');
-                iconOn.classList.remove('hidden');
-
-                if (shopConfig.musicUrl && shopConfig.musicUrl.trim() !== '') {
-                    audioEl.src = shopConfig.musicUrl;
-                    audioEl.volume = 0.35;
-                    audioEl.play().catch(() => {});
-                } else {
-                    await Tone.start();
-                    if (!toneSynth) {
-                        toneSynth = new Tone.PolySynth(Tone.Synth, {
-                            oscillator: { type: "sine" },
-                            envelope: { attack: 0.08, decay: 0.4, sustain: 0.2, release: 1.5 }
-                        }).toDestination();
-                        toneSynth.volume.value = -16;
-
-                        const notes = ["C5", "E5", "G5", "B5", "A5", "G5", "E5", "D5"];
-                        let step = 0;
-                        toneLoop = new Tone.Loop(time => {
-                            toneSynth.triggerAttackRelease(notes[step % notes.length], "4n", time);
-                            step++;
-                        }, "2n");
-                    }
-                    Tone.Transport.start();
-                    toneLoop.start(0);
-                }
-                showToast('เปิดเพลงคลอเบาๆ 🎵');
-            } else {
-                isMusicPlaying = false;
-                iconOn.classList.add('hidden');
-                iconOff.classList.remove('hidden');
-                audioEl.pause();
-                if (toneLoop) {
-                    toneLoop.stop();
-                    Tone.Transport.stop();
-                }
-            }
-        };
-
-        // Initialize Firebase & Real-time Listeners
-        async function initApp() {
-            renderShopConfig();
-
-            if (!firebaseConfig) {
-                allReviews = defaultInitialReviews.map((r, i) => ({ ...r, id: 'local-' + i }));
-                renderReviews();
-                return;
-            }
-
+        function playSoftChime() {
             try {
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
+                if (!audioCtx) {
+                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                    audioCtx = new AudioContextClass();
                 }
+                if (audioCtx.state === "suspended") {
+                    audioCtx.resume();
+                }
+                const notes = [523.25, 659.25, 783.99, 987.77];
+                const freq = notes[Math.floor(Math.random() * notes.length)];
+                const now = audioCtx.currentTime;
 
-                currentUser = auth.currentUser;
-                if (!currentUser) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = "sine";
+                osc.frequency.setValueAtTime(freq, now);
 
-                // 1. Listen to Shop Settings Document
-                const configDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'shop_settings', 'main');
-                onSnapshot(configDocRef, async (docSnap) => {
-                    if (docSnap.exists()) {
-                        shopConfig = { ...shopConfig, ...docSnap.data() };
-                        renderShopConfig();
-                    } else {
-                        await setDoc(configDocRef, shopConfig);
-                    }
-                }, (error) => {
-                    console.error("Shop config snapshot error:", error);
-                });
+                gain.gain.setValueAtTime(0.0001, now);
+                gain.gain.exponentialRampToValueAtTime(0.03, now + 0.04);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.1);
 
-                // 2. Listen to Reviews Collection
-                const reviewsColRef = collection(db, 'artifacts', appId, 'public', 'data', 'reviews');
-                let seededCheckDone = false;
-
-                onSnapshot(reviewsColRef, async (snapshot) => {
-                    if (snapshot.empty && !seededCheckDone) {
-                        seededCheckDone = true;
-                        for (const item of defaultInitialReviews) {
-                            await addDoc(reviewsColRef, item);
-                        }
-                        return;
-                    }
-                    seededCheckDone = true;
-                    allReviews = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-                    renderReviews();
-                }, (error) => {
-                    console.error("Reviews snapshot error:", error);
-                });
-
-            } catch (err) {
-                console.error("Firebase init error:", err);
-                allReviews = defaultInitialReviews.map((r, i) => ({ ...r, id: 'local-' + i }));
-                renderReviews();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 1.15);
+            } catch (e) {
+                // Ignore audio errors
             }
         }
 
-        window.addEventListener('DOMContentLoaded', initApp);
+        function toggleMusic() {
+            const btn = document.getElementById("musicToggleBtn");
+            isMusicPlaying = !isMusicPlaying;
+
+            if (isMusicPlaying) {
+                btn.classList.add("music-playing", "bg-[#2b2927]", "text-white");
+                btn.classList.remove("bg-white", "text-[#2b2927]");
+                playSoftChime();
+                chimeInterval = setInterval(playSoftChime, 1800);
+                showToast("เปิดเสียงคลอเบาๆ แล้ว");
+            } else {
+                btn.classList.remove("music-playing", "bg-[#2b2927]", "text-white");
+                btn.classList.add("bg-white", "text-[#2b2927]");
+                clearInterval(chimeInterval);
+                chimeInterval = null;
+                showToast("ปิดเสียงแล้ว");
+            }
+        }
+
+        function createHeartElement(leftPercent, bottomPx, sizePx, durationSec, delaySec) {
+            const heart = document.createElement("div");
+            heart.className = "floating-heart";
+            heart.style.left = `${leftPercent}%`;
+            heart.style.bottom = `${bottomPx}px`;
+            heart.style.fontSize = `${sizePx}px`;
+            heart.style.animationDuration = `${durationSec}s`;
+            heart.style.animationDelay = `${delaySec}s`;
+            heart.textContent = "♡";
+            return heart;
+        }
+
+        function initFloatingHearts() {
+            const layer = document.getElementById("heartsLayer");
+            if (!layer) return;
+            layer.innerHTML = "";
+
+            const positions = [12, 28, 48, 68, 84, 38, 76];
+            positions.forEach((pos, idx) => {
+                const heart = createHeartElement(
+                    pos,
+                    20 + (idx % 3) * 140,
+                    14 + (idx % 3) * 4,
+                    6 + (idx % 4) * 1.5,
+                    -(idx * 1.2)
+                );
+                layer.appendChild(heart);
+            });
+        }
+
+        function spawnBurstHearts() {
+            const layer = document.getElementById("heartsLayer");
+            if (!layer) return;
+
+            for (let i = 0; i < 6; i++) {
+                const left = 10 + Math.random() * 80;
+                const bottom = 60 + Math.random() * 260;
+                const size = 14 + Math.floor(Math.random() * 8);
+                const burst = createHeartElement(left, bottom, size, 2.2 + Math.random(), 0);
+                layer.appendChild(burst);
+                setTimeout(() => burst.remove(), 3400);
+            }
+        }
+
+        // =====================================================================
+        // UTILITIES (Copy & Toast)
+        // =====================================================================
+        function copyTextById(elementId, successMsg) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            const text = el.textContent.trim();
+
+            const tempInput = document.createElement("textarea");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            showToast(successMsg || "คัดลอกแล้ว!");
+        }
+
+        let toastTimeout = null;
+        function showToast(msg) {
+            const toast = document.getElementById("toast");
+            const msgEl = document.getElementById("toastMessage");
+            msgEl.textContent = msg;
+            toast.classList.remove("opacity-0", "translate-y-3");
+            toast.classList.add("opacity-100", "translate-y-0");
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add("opacity-0", "translate-y-3");
+                toast.classList.remove("opacity-100", "translate-y-0");
+            }, 2400);
+        }
+
+        function escapeHTML(str) {
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+        }
     </script>
 </body>
 </html>
